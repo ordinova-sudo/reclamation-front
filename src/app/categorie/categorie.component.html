@@ -1,0 +1,12 @@
+<form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+<div>
+    <label>Nom de categorie :</label>
+    <input type="text" formControlName="categoryName">
+    <div *ngIf="categoryForm.get('categoryName')?.touched && categoryForm.get('categoryName')?.invalid" style="color:red">
+      Nom de categorie requis
+    </div>
+</div>
+
+  <button type="submit" [disabled]="categoryForm.invalid">Envoyer</button>
+</form>
+

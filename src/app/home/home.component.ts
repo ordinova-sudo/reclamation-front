@@ -1,0 +1,23 @@
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
+import { runMailboxExample } from '../mailbox';
+@Component({
+  selector: 'app-home',
+  standalone: true,
+  imports: [RouterLink],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
+})
+export class HomeComponent implements OnInit,OnDestroy{
+
+
+
+  mailBoxSubscription : any;
+  ngOnInit(): void { //this.mailBoxSubscription= runMailboxExample();
+    }
+  ngOnDestroy(): void { //this.mailBoxSubscription.unsubscribe();
+    }
+
+}

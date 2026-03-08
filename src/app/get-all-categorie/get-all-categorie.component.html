@@ -1,0 +1,11 @@
+<div class="categories-container">
+  <h2>Liste des catégories</h2>
+
+  <div *ngIf="!listCategories.length" class="empty-message">
+    Aucune catégorie disponible.
+  </div>
+
+  <ul *ngIf="listCategories.length" class="categories-list">
+    <app-category-item *ngFor="let cat of listCategories" [category]="cat" ></app-category-item>
+  </ul>
+</div>
