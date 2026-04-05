@@ -1,0 +1,101 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(135deg, #4e73df, #1cc88a);
+}
+.right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+}
+
+form {
+  width: 50%; 
+  height: auto;
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  letter-spacing: 2px;
+  color: antiquewhite;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+button {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  background: white;
+  color: #2c3e50;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #2c3e50;
+  color: white;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.notif{
+  background: #ffe5e5;
+  color: #d8000c;
+
+  padding: 12px 16px;
+  border-radius: 20px;
+
+  border-left: 5px solid #d8000c;
+
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+
+  margin: 10px 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .left, .right {
+    flex: none;
+    width: 100%;
+    height: 50vh;
+  }
+}

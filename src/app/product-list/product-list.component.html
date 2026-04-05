@@ -1,9 +1,0 @@
-<h2>Produits</h2>
-<ul>
-<li *ngFor="let p of products" [ngStyle]="getItemStyle(p.inStock)" [ngClass]="getItemClass(p.inStock)">
-{{ p.name }} - ${{ p.price }}
-<span *ngIf="p.inStock">✅ En stock</span>
-<span *ngIf="!p.inStock">❌ Rupture</span>
-<button (click)="addToCart(p.name)" [disabled]="!p.inStock">Ajouter</button>
-</li>
-</ul>

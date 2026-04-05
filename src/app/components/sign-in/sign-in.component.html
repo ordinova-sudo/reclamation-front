@@ -1,0 +1,41 @@
+<div class="container">
+
+
+  <div class="right">
+    <form #userForm="ngForm" (ngSubmit)="submitForm(userForm)">
+      <h2>Login</h2>
+
+      <label for="identifier">Username :</label>
+      <input
+        type="text"
+        id="identifier"
+        name="identifier"
+        [(ngModel)]="user.identifier"
+        #identifier="ngModel"
+        required
+        minlength="3"
+        placeholder="Entrer email ou numéro de téléphone"
+      />
+      <div *ngIf="identifier.invalid && identifier.touched" class="notif">
+        Le nom est obligatoire et doit avoir au moins 3 caractères.
+      </div>
+
+      <label for="password">Password :</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="user.password"
+        #password="ngModel"
+        placeholder="Enter your password"
+        required
+      />
+      <div *ngIf="password.invalid && password.touched" class="notif">
+        Le mot de passe est obligatoire.
+      </div>
+
+      <button type="submit" [disabled]="userForm.invalid">Envoyer</button>
+    </form>
+  </div>
+ 
+</div>
