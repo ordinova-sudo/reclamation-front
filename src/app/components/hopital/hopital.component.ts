@@ -55,7 +55,7 @@ onSubmit() {
     this.hopitalService.createHopital(this.hopitalForm.value).subscribe({
         next: (res) => {
            this.snackBar.open(
-      'Categorie ajoutée avec succés 🎉',
+      'Hopital ajoutée avec succés 🎉',
       'Fermer',
       {
         duration: 3000,
@@ -63,11 +63,10 @@ onSubmit() {
         verticalPosition: 'top'
       });
       this.router.navigate(['/home']);
-      //this.categoryForm.reset();
         },
         error: (err) => {
            this.snackBar.open(
-      "Erreur lors de l'ajout de catégorie ❌",
+      "Erreur lors de l'ajout de l'hopital ❌",
       'Fermer',
       {
         duration: 3000,

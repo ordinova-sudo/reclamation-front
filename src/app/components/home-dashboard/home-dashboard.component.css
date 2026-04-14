@@ -1,0 +1,22 @@
+.dashboard {
+  text-align: center;
+}
+
+.dashboard h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dashboard p {
+  color: #666;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.dashboard img {
+  max-width: 600px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

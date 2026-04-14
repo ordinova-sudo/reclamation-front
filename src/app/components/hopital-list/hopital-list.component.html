@@ -1,0 +1,62 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Hôpitaux</h1>
+    <button class="btn-add" (click)="createHopital()">
+      ➕ Créer un hôpital
+    </button>
+  </div>
+
+  <div class="search-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterHopitals()"
+      placeholder="🔍 Rechercher par nom d'hôpital..."
+      class="search-input"
+    />
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredHopitals.length === 0" class="no-data">
+    Aucun hôpital trouvé
+  </div>
+
+  <div *ngIf="!loading && filteredHopitals.length > 0" class="table-container">
+    <table class="hopital-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Gouvernorat</th>
+          <th>Ville</th>
+          <th>Téléphone</th>
+          <th>Urgence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let hopital of filteredHopitals" 
+          (click)="viewHopitalDetails(hopital.id)"
+          class="table-row">
+          <td class="nom-cell">{{ hopital.nom }}</td>
+          <td>
+            <span class="badge" [class.urgence]="hopital.urgence">
+              {{ hopital.type }}
+            </span>
+          </td>
+          <td>{{ hopital.gouvernorat }}</td>
+          <td>{{ hopital.ville || '-' }}</td>
+          <td>{{ hopital.telephone || '-' }}</td>
+          <td>
+            <span [class.available]="hopital.urgence" [class.unavailable]="!hopital.urgence">
+              {{ hopital.urgence ? '✓ Oui' : '✗ Non' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

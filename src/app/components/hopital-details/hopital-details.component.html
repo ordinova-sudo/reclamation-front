@@ -1,0 +1,177 @@
+<div class="container">
+  <div *ngIf="loading" class="loading">
+    Chargement des détails...
+  </div>
+
+  <div *ngIf="!loading && !hopitalForm.value.nom" class="error">
+    Hôpital non trouvé
+  </div>
+
+  <div *ngIf="!loading && hopitalForm.value.nom" class="details-card">
+    <div class="header">
+      <button class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>{{ editMode ? 'Modifier l\'hôpital' : hopitalForm.value.nom }}</h1>
+      <button 
+        *ngIf="!editMode" 
+        class="btn-edit" 
+        (click)="toggleEditMode()">
+        ✏️ Modifier
+      </button>
+    </div>
+
+    <form [formGroup]="hopitalForm" (ngSubmit)="onSubmit()" class="form-grid">
+      
+      <div class="form-group">
+        <label>Nom *</label>
+        <input 
+          type="text" 
+          formControlName="nom" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Gouvernorat *</label>
+        <select 
+          formControlName="gouvernorat" 
+          [disabled]="!editMode"
+          [class.readonly]="!editMode">
+          <option value="">-- Choisir --</option>
+          <option *ngFor="let g of gouvernorats" [value]="g">{{ g }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Ville</label>
+        <input 
+          type="text" 
+          formControlName="ville" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Adresse</label>
+        <input 
+          type="text" 
+          formControlName="adresse" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Latitude</label>
+        <input 
+          type="number" 
+          formControlName="latitude" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Longitude</label>
+        <input 
+          type="number" 
+          formControlName="longitude" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone</label>
+        <input 
+          type="text" 
+          formControlName="telephone" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input 
+          type="email" 
+          formControlName="email" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Site Web</label>
+        <input 
+          type="text" 
+          formControlName="siteWeb" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Heure ouverture</label>
+        <input 
+          type="time" 
+          formControlName="heureOuverture" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Heure fermeture</label>
+        <input 
+          type="time" 
+          formControlName="heureFermeture" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group full-width">
+        <label>Description</label>
+        <textarea 
+          formControlName="description" 
+          rows="3"
+          [readonly]="!editMode"
+          [class.readonly]="!editMode"></textarea>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Type *</label>
+        <div class="radio-group">
+          <label>
+            <input 
+              type="radio" 
+              value="PUBLIC" 
+              formControlName="type"
+              [disabled]="!editMode">
+            Public
+          </label>
+          <label>
+            <input 
+              type="radio" 
+              value="PRIVE" 
+              formControlName="type"
+              [disabled]="!editMode">
+            Privé
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label>
+          <input 
+            type="checkbox" 
+            formControlName="urgence"
+            [disabled]="!editMode">
+          Service d'urgence (SAMU)
+        </label>
+      </div>
+
+      <div *ngIf="editMode" class="button-group">
+        <button type="submit" class="btn-save" [disabled]="hopitalForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+          ❌ Annuler
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

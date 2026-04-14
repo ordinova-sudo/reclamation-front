@@ -14,4 +14,16 @@ constructor(private http: HttpClient) { }
   createHopital(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}`, data);
   }
+
+  getAllHopitals(): Observable<any> {
+    return this.http.get(`${this.apiUrl}`);
+  }
+
+  getHopitalById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  updateHopital(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, data);
+  }
 }
