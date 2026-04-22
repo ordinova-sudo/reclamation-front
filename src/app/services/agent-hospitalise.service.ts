@@ -5,29 +5,28 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class HopitalService {
-      private apiUrl = 'http://localhost:8087/api/hopitaux'; 
+export class AgentHospitaliseService {
+  private apiUrl = 'http://localhost:8087/api/agents'; 
 
+  constructor(private http: HttpClient) { }
 
-constructor(private http: HttpClient) { }
-
-  createHopital(data: any): Observable<any> {
+  createAgent(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}`, data);
   }
 
-  getAllHopitals(): Observable<any> {
+  getAllAgents(): Observable<any> {
     return this.http.get(`${this.apiUrl}`);
   }
 
-  getHopitalById(id: number): Observable<any> {
+  getAgentById(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  updateHopital(id: number, data: any): Observable<any> {
+  updateAgent(id: number, data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}`, data);
   }
 
-  deleteHopital(id: number): Observable<any> {
+  deleteAgent(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

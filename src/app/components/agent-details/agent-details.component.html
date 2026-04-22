@@ -1,0 +1,115 @@
+<div class="container">
+  <div *ngIf="loading" class="loading">
+    Chargement des détails...
+  </div>
+
+  <div *ngIf="!loading && !agentForm.value.firstName" class="error">
+    Agent non trouvé
+  </div>
+
+  <div *ngIf="!loading && agentForm.value.firstName" class="details-card">
+    <div class="header">
+      <button class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>{{ editMode ? 'Modifier l\'agent' : agentForm.value.firstName + ' ' + agentForm.value.lastName }}</h1>
+      <button 
+        *ngIf="!editMode" 
+        class="btn-edit" 
+        (click)="toggleEditMode()">
+        ✏️ Modifier
+      </button>
+    </div>
+
+    <form [formGroup]="agentForm" (ngSubmit)="onSubmit()" class="form-grid">
+      
+      <div class="form-group">
+        <label>Matricule *</label>
+        <input 
+          type="text" 
+          formControlName="matricule" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input 
+          type="text" 
+          formControlName="firstName" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Nom *</label>
+        <input 
+          type="text" 
+          formControlName="lastName" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input 
+          type="email" 
+          formControlName="email" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone *</label>
+        <input 
+          type="text" 
+          formControlName="phoneNumber" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <input 
+          *ngIf="!editMode"
+          type="text" 
+          formControlName="hopitalNom"
+          readonly
+          class="readonly">
+        <select 
+          *ngIf="editMode"
+          formControlName="hopital"
+          [compareWith]="compareHopitals">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Poste</label>
+        <input 
+          type="text" 
+          formControlName="poste" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group full-width">
+        <label>Département</label>
+        <input 
+          type="text" 
+          formControlName="departement" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div *ngIf="editMode" class="button-group">
+        <button type="submit" class="btn-save" [disabled]="agentForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+          ❌ Annuler
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

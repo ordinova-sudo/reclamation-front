@@ -2,25 +2,25 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { HopitalService } from '../../services/hopital.service';
+import { AgentHospitaliseService } from '../../services/agent-hospitalise.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
-  selector: 'app-hopital-list',
+  selector: 'app-agent-list',
   standalone: true,
   imports: [CommonModule, HttpClientModule, FormsModule, MatSnackBarModule],
-  templateUrl: './hopital-list.component.html',
-  styleUrl: './hopital-list.component.css'
+  templateUrl: './agent-list.component.html',
+  styleUrl: './agent-list.component.css'
 })
-export class HopitalListComponent implements OnInit {
-  hopitals: any[] = [];
-  filteredHopitals: any[] = [];
+export class AgentListComponent implements OnInit {
+  agents: any[] = [];
+  filteredAgents: any[] = [];
   loading: boolean = true;
   searchTerm: string = '';
 
   constructor(
-    private hopitalService: HopitalService,
+    private agentService: AgentHospitaliseService,
     private router: Router,
     private snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -28,56 +28,57 @@ export class HopitalListComponent implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.loadHopitals();
+      this.loadAgents();
     } else {
       this.loading = false;
     }
   }
 
-  loadHopitals(): void {
-    this.hopitalService.getAllHopitals().subscribe({
+  loadAgents(): void {
+    this.agentService.getAllAgents().subscribe({
       next: (data) => {
-        this.hopitals = data;
-        this.filteredHopitals = data;
+        this.agents = data;
+        this.filteredAgents = data;
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur lors du chargement des hôpitaux', err);
+        console.error('Erreur lors du chargement des agents', err);
         this.loading = false;
       }
     });
   }
 
-  filterHopitals(): void {
+  filterAgents(): void {
     if (!this.searchTerm.trim()) {
-      this.filteredHopitals = this.hopitals;
+      this.filteredAgents = this.agents;
     } else {
-      this.filteredHopitals = this.hopitals.filter(hopital =>
-        hopital.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
+      this.filteredAgents = this.agents.filter(agent =>
+        agent.fullName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        agent.email.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
   }
 
-  viewHopitalDetails(id: number): void {
-    this.router.navigate(['/home/hopital-details', id]);
+  viewAgentDetails(id: number): void {
+    this.router.navigate(['/home/agent-details', id]);
   }
 
-  createHopital(): void {
-    this.router.navigate(['/home/addHopital']);
+  createAgent(): void {
+    this.router.navigate(['/home/addAgent']);
   }
 
-  deleteHopital(event: Event, id: number, nom: string): void {
+  deleteAgent(event: Event, id: number, fullName: string): void {
     event.stopPropagation();
     
-    if (confirm(`Êtes-vous sûr de vouloir supprimer l'hôpital "${nom}" ?`)) {
-      this.hopitalService.deleteHopital(id).subscribe({
+    if (confirm(`Êtes-vous sûr de vouloir supprimer l'agent "${fullName}" ?`)) {
+      this.agentService.deleteAgent(id).subscribe({
         next: () => {
-          this.snackBar.open('Hôpital supprimé avec succès 🗑️', 'Fermer', {
+          this.snackBar.open('Agent supprimé avec succès 🗑️', 'Fermer', {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
-          this.loadHopitals();
+          this.loadAgents();
         },
         error: (err) => {
           console.error('Erreur lors de la suppression', err);

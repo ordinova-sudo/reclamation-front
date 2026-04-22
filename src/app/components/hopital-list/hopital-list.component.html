@@ -34,26 +34,34 @@
           <th>Ville</th>
           <th>Téléphone</th>
           <th>Urgence</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr 
           *ngFor="let hopital of filteredHopitals" 
-          (click)="viewHopitalDetails(hopital.id)"
           class="table-row">
-          <td class="nom-cell">{{ hopital.nom }}</td>
-          <td>
+          <td class="nom-cell" (click)="viewHopitalDetails(hopital.id)">{{ hopital.nom }}</td>
+          <td (click)="viewHopitalDetails(hopital.id)">
             <span class="badge" [class.urgence]="hopital.urgence">
               {{ hopital.type }}
             </span>
           </td>
-          <td>{{ hopital.gouvernorat }}</td>
-          <td>{{ hopital.ville || '-' }}</td>
-          <td>{{ hopital.telephone || '-' }}</td>
-          <td>
+          <td (click)="viewHopitalDetails(hopital.id)">{{ hopital.gouvernorat }}</td>
+          <td (click)="viewHopitalDetails(hopital.id)">{{ hopital.ville || '-' }}</td>
+          <td (click)="viewHopitalDetails(hopital.id)">{{ hopital.telephone || '-' }}</td>
+          <td (click)="viewHopitalDetails(hopital.id)">
             <span [class.available]="hopital.urgence" [class.unavailable]="!hopital.urgence">
               {{ hopital.urgence ? '✓ Oui' : '✗ Non' }}
             </span>
+          </td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteHopital($event, hopital.id, hopital.nom)"
+              title="Supprimer">
+              🗑️
+            </button>
           </td>
         </tr>
       </tbody>

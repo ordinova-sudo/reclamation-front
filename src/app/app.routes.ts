@@ -8,6 +8,9 @@ import { HopitalComponent } from './components/hopital/hopital.component';
 import { HopitalListComponent } from './components/hopital-list/hopital-list.component';
 import { HopitalDetailsComponent } from './components/hopital-details/hopital-details.component';
 import { HomeDashboardComponent } from './components/home-dashboard/home-dashboard.component';
+import { AgentHospitaliseComponent } from './components/agent-hospitalise/agent-hospitalise.component';
+import { AgentListComponent } from './components/agent-list/agent-list.component';
+import { AgentDetailsComponent } from './components/agent-details/agent-details.component';
 
 
 export const routes: Routes = [
@@ -22,7 +25,10 @@ export const routes: Routes = [
         { path: '', component: HomeDashboardComponent },
         { path: 'addHopital', component: HopitalComponent },
         { path: 'hopital-list', component: HopitalListComponent },
-        { path: 'hopital-details/:id', component: HopitalDetailsComponent }
+        { path: 'hopital-details/:id', component: HopitalDetailsComponent },
+        { path: 'addAgent', component: AgentHospitaliseComponent },
+        { path: 'agent-list', component: AgentListComponent },
+        { path: 'agent-details/:id', component: AgentDetailsComponent }
       ]
     },
    /* { path: 'getAllCategorie', component: GetAllCategorieComponent },*/

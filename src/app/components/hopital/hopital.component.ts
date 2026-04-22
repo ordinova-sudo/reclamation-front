@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { HopitalService } from '../../services/hopital.service';
 
 @Component({
-  selector: 'app-hopital',
+  selector: 'app-hopital', 
   standalone: true,
   imports: [ReactiveFormsModule,CommonModule,HttpClientModule,MatSnackBarModule],
   templateUrl: './hopital.component.html',

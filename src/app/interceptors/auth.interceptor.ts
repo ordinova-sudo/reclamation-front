@@ -9,7 +9,6 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private  jwtService:JwtService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const  token   = localStorage.getItem('token')?? '';
-    alert(this.jwtService.getUserRole());   
      if (req.url.includes('/api/v1/auth/signin') ) 
     {return next.handle(req)}
     const authReq = token?

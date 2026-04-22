@@ -70,18 +70,18 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.hopital-table {
+.agent-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
 }
 
-.hopital-table thead {
+.agent-table thead {
   background-color: #3498db;
   color: white;
 }
 
-.hopital-table th {
+.agent-table th {
   padding: 15px;
   text-align: left;
   font-weight: 600;
@@ -90,7 +90,7 @@
   letter-spacing: 0.5px;
 }
 
-.hopital-table tbody tr {
+.agent-table tbody tr {
   border-bottom: 1px solid #eee;
   transition: background-color 0.2s;
 }
@@ -103,7 +103,7 @@
   background-color: #f8f9fa;
 }
 
-.hopital-table td {
+.agent-table td {
   padding: 15px;
   color: #555;
   font-size: 14px;
@@ -114,28 +114,10 @@
   color: #2c3e50;
 }
 
-.badge {
-  display: inline-block;
-  padding: 5px 12px;
-  border-radius: 15px;
-  font-size: 12px;
-  font-weight: bold;
-  background-color: #3498db;
-  color: white;
-}
-
-.badge.urgence {
-  background-color: #e74c3c;
-}
-
-.available {
-  color: #27ae60;
-  font-weight: bold;
-}
-
-.unavailable {
-  color: #e74c3c;
-  font-weight: bold;
+.matricule-cell {
+  font-weight: 600;
+  color: #3498db;
+  font-family: monospace;
 }
 
 .actions-cell {
@@ -164,12 +146,12 @@
     padding: 10px;
   }
 
-  .hopital-table {
+  .agent-table {
     font-size: 12px;
   }
 
-  .hopital-table th,
-  .hopital-table td {
+  .agent-table th,
+  .agent-table td {
     padding: 10px 8px;
   }
 }

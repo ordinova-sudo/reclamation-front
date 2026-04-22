@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Agents Hospitalisés</h1>
+    <button class="btn-add" (click)="createAgent()">
+      ➕ Créer un agent
+    </button>
+  </div>
+
+  <div class="search-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterAgents()"
+      placeholder="🔍 Rechercher par nom ou email..."
+      class="search-input"
+    />
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredAgents.length === 0" class="no-data">
+    Aucun agent trouvé
+  </div>
+
+  <div *ngIf="!loading && filteredAgents.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Matricule</th>
+          <th>Nom Complet</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Hôpital</th>
+          <th>Poste</th>
+          <th>Département</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let agent of filteredAgents" 
+          class="table-row">
+          <td class="matricule-cell" (click)="viewAgentDetails(agent.id)">{{ agent.matricule }}</td>
+          <td class="nom-cell" (click)="viewAgentDetails(agent.id)">{{ agent.fullName }}</td>
+          <td (click)="viewAgentDetails(agent.id)">{{ agent.email }}</td>
+          <td (click)="viewAgentDetails(agent.id)">{{ agent.phoneNumber }}</td>
+          <td (click)="viewAgentDetails(agent.id)">{{ agent.hopital?.nom || '-' }}</td>
+          <td (click)="viewAgentDetails(agent.id)">{{ agent.poste || '-' }}</td>
+          <td (click)="viewAgentDetails(agent.id)">{{ agent.departement || '-' }}</td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteAgent($event, agent.id, agent.fullName)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

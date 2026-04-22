@@ -1,0 +1,138 @@
+<div class="container">
+  <form [formGroup]="agentForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">👨‍⚕️</div>
+      <h2>Création d'un Agent Hospitalisé</h2>
+      <p class="subtitle">Veuillez remplir les informations ci-dessous</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Matricule *</label>
+        <input 
+          type="text" 
+          formControlName="matricule"
+          placeholder="Ex: MAT-2024-001">
+        <span class="error-message" *ngIf="agentForm.get('matricule')?.invalid && agentForm.get('matricule')?.touched">
+          Le matricule est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Email *</label>
+        <input 
+          type="email" 
+          formControlName="email"
+          placeholder="exemple@email.com">
+        <span class="error-message" *ngIf="agentForm.get('email')?.invalid && agentForm.get('email')?.touched">
+          Email valide requis
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Nom *</label>
+        <input 
+          type="text" 
+          formControlName="lastName"
+          placeholder="Nom de l'agent">
+        <span class="error-message" *ngIf="agentForm.get('lastName')?.invalid && agentForm.get('lastName')?.touched">
+          Le nom est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Prénom *</label>
+        <input 
+          type="text" 
+          formControlName="firstName"
+          placeholder="Prénom de l'agent">
+        <span class="error-message" *ngIf="agentForm.get('firstName')?.invalid && agentForm.get('firstName')?.touched">
+          Le prénom est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Téléphone *</label>
+        <input 
+          type="text" 
+          formControlName="phoneNumber"
+          placeholder="+216 XX XXX XXX">
+        <span class="error-message" *ngIf="agentForm.get('phoneNumber')?.invalid && agentForm.get('phoneNumber')?.touched">
+          Le téléphone est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <select formControlName="hopital">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+        <span class="error-message" *ngIf="agentForm.get('hopital')?.invalid && agentForm.get('hopital')?.touched">
+          L'hôpital est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group password-group">
+        <label>Mot de passe *</label>
+        <div class="password-input-wrapper">
+          <input 
+            [type]="showPassword ? 'text' : 'password'" 
+            formControlName="password"
+            placeholder="Minimum 6 caractères">
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="togglePasswordVisibility()">
+            {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <span class="error-message" *ngIf="agentForm.get('password')?.invalid && agentForm.get('password')?.touched">
+          Mot de passe requis (min. 6 caractères)
+        </span>
+      </div>
+
+      <div class="form-group password-group">
+        <label>Confirmer le mot de passe *</label>
+        <div class="password-input-wrapper">
+          <input 
+            [type]="showConfirmPassword ? 'text' : 'password'" 
+            formControlName="confirmPassword"
+            placeholder="Retapez le mot de passe">
+          <button 
+            type="button" 
+            class="toggle-password"
+            (click)="toggleConfirmPasswordVisibility()">
+            {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+          </button>
+        </div>
+        <span class="error-message" *ngIf="agentForm.errors?.['passwordMismatch'] && agentForm.get('confirmPassword')?.touched">
+          Les mots de passe ne correspondent pas
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Poste</label>
+        <input 
+          type="text" 
+          formControlName="poste"
+          placeholder="Ex: Infirmier, Médecin...">
+      </div>
+
+      <div class="form-group">
+        <label>Département</label>
+        <input 
+          type="text" 
+          formControlName="departement"
+          placeholder="Ex: Cardiologie, Urgences...">
+      </div>
+
+      <button type="submit" [disabled]="agentForm.invalid" class="submit-btn">
+        <span *ngIf="!agentForm.invalid">✓ Enregistrer l'agent</span>
+        <span *ngIf="agentForm.invalid">⚠️ Veuillez remplir tous les champs obligatoires</span>
+      </button>
+    </div>
+
+  </form>
+</div>
