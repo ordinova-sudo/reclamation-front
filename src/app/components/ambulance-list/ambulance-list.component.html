@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Ambulances</h1>
+    <button class="btn-add" (click)="createAmbulance()">
+      ➕ Créer une ambulance
+    </button>
+  </div>
+
+  <div class="filters-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterAmbulances()"
+      placeholder="🔍 Rechercher par matricule..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedType" 
+      (change)="filterAmbulances()"
+      class="filter-select">
+      <option value="">Tous les types</option>
+      <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+    </select>
+
+    <select 
+      [(ngModel)]="selectedHopital" 
+      (change)="filterAmbulances()"
+      class="filter-select">
+      <option value="">Tous les hôpitaux</option>
+      <option *ngFor="let hopital of hopitaux" [value]="hopital.id">{{ hopital.nom }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredAmbulances.length === 0" class="no-data">
+    Aucune ambulance trouvée
+  </div>
+
+  <div *ngIf="!loading && filteredAmbulances.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Matricule</th>
+          <th>Type</th>
+          <th>Hôpital</th>
+          <th>Disponible</th>
+          <th>Position</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let ambulance of filteredAmbulances" 
+          class="table-row">
+          <td class="matricule-cell" (click)="viewAmbulanceDetails(ambulance.id)">{{ ambulance.matricule }}</td>
+          <td (click)="viewAmbulanceDetails(ambulance.id)">{{ ambulance.type }}</td>
+          <td (click)="viewAmbulanceDetails(ambulance.id)">{{ ambulance.hopital?.nom || '-' }}</td>
+          <td (click)="viewAmbulanceDetails(ambulance.id)">
+            <span [class.available]="ambulance.disponible" [class.unavailable]="!ambulance.disponible">
+              {{ ambulance.disponible ? '✓ Oui' : '✗ Non' }}
+            </span>
+          </td>
+          <td (click)="viewAmbulanceDetails(ambulance.id)">
+            {{ ambulance.latitude && ambulance.longitude ? ambulance.latitude + ', ' + ambulance.longitude : '-' }}
+          </td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteAmbulance($event, ambulance.id, ambulance.matricule)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

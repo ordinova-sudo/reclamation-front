@@ -1,0 +1,69 @@
+<div class="container">
+  <form [formGroup]="scannerForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">🔬</div>
+      <h2>Création d'un Scanner</h2>
+      <p class="subtitle">Veuillez remplir les informations ci-dessous</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Modèle *</label>
+        <input 
+          type="text" 
+          formControlName="modele"
+          placeholder="Ex: Siemens SOMATOM">
+        <span class="error-message" *ngIf="scannerForm.get('modele')?.invalid && scannerForm.get('modele')?.touched">
+          Le modèle est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Marque *</label>
+        <input 
+          type="text" 
+          formControlName="marque"
+          placeholder="Ex: Siemens, GE, Philips">
+        <span class="error-message" *ngIf="scannerForm.get('marque')?.invalid && scannerForm.get('marque')?.touched">
+          La marque est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>État *</label>
+        <select formControlName="etat">
+          <option value="">-- Choisir un état --</option>
+          <option *ngFor="let e of etatsScanner" [value]="e">{{ e }}</option>
+        </select>
+        <span class="error-message" *ngIf="scannerForm.get('etat')?.invalid && scannerForm.get('etat')?.touched">
+          L'état est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <select formControlName="hopital">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+        <span class="error-message" *ngIf="scannerForm.get('hopital')?.invalid && scannerForm.get('hopital')?.touched">
+          L'hôpital est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="disponible">
+          <span>✓ Disponible</span>
+        </label>
+      </div>
+
+      <button type="submit" [disabled]="scannerForm.invalid" class="submit-btn">
+        <span *ngIf="!scannerForm.invalid">✓ Enregistrer le scanner</span>
+        <span *ngIf="scannerForm.invalid">⚠️ Veuillez remplir tous les champs obligatoires</span>
+      </button>
+    </div>
+
+  </form>
+</div>

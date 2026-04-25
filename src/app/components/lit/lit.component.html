@@ -1,0 +1,69 @@
+<div class="container">
+  <form [formGroup]="litForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">🛏️</div>
+      <h2>Création d'un Lit</h2>
+      <p class="subtitle">Veuillez remplir les informations ci-dessous</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Numéro *</label>
+        <input 
+          type="text" 
+          formControlName="numero"
+          placeholder="Ex: LIT-101">
+        <span class="error-message" *ngIf="litForm.get('numero')?.invalid && litForm.get('numero')?.touched">
+          Le numéro est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Type *</label>
+        <select formControlName="type">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let t of typesLit" [value]="t">{{ t }}</option>
+        </select>
+        <span class="error-message" *ngIf="litForm.get('type')?.invalid && litForm.get('type')?.touched">
+          Le type est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>État *</label>
+        <select formControlName="etat">
+          <option value="">-- Choisir un état --</option>
+          <option *ngFor="let e of etatsLit" [value]="e">{{ e }}</option>
+        </select>
+        <span class="error-message" *ngIf="litForm.get('etat')?.invalid && litForm.get('etat')?.touched">
+          L'état est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <select formControlName="hopital">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+        <span class="error-message" *ngIf="litForm.get('hopital')?.invalid && litForm.get('hopital')?.touched">
+          L'hôpital est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="estOccupe">
+          <span>🔴 Occupé</span>
+        </label>
+      </div>
+
+      <button type="submit" [disabled]="litForm.invalid" class="submit-btn">
+        <span *ngIf="!litForm.invalid">✓ Enregistrer le lit</span>
+        <span *ngIf="litForm.invalid">⚠️ Veuillez remplir tous les champs obligatoires</span>
+      </button>
+    </div>
+
+  </form>
+</div>

@@ -5,12 +5,38 @@
 
     <ul>
       <li>
-        <a routerLink="/home/hopital-list">Mes Hopitaux</a>
+        <a routerLink="/home">🏠 Home</a>
       </li>
       <li>
-        <a routerLink="/home/agent-list">Mes Agents Hospitalisés</a>
+        <a routerLink="/home/hopital-list">🏥 Mes Hopitaux</a>
+      </li>
+      <li>
+        <a routerLink="/home/agent-list">👨‍⚕️ Mes Agents Hospitalisés</a>
+      </li>
+      <li>
+        <a routerLink="/home/ambulance-list">🚑 Mes Ambulances</a>
+      </li>
+      <li>
+        <a routerLink="/home/scanner-list">🔬 Mes Scanners</a>
+      </li>
+      <li>
+        <a routerLink="/home/lit-list">🛏️ Mes Lits</a>
       </li>
     </ul>
+
+    <div class="profile-section" *ngIf="userProfile">
+      <div class="profile-divider"></div>
+      <a routerLink="/home/profile" class="profile-card">
+        <div class="profile-icon">👤</div>
+        <div class="profile-info">
+          <h3>{{ userProfile.firstName }} {{ userProfile.lastName }}</h3>
+          <p class="profile-role">{{ userProfile.role }}</p>
+        </div>
+      </a>
+      <div class="logout-button" (click)="logout()">
+        🚪 Déconnexion
+      </div>
+    </div>
   </div>
 
   <div class="content">

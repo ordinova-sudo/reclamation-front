@@ -1,0 +1,53 @@
+<div class="container">
+  <div *ngIf="loading" class="loading">
+    Chargement du profil...
+  </div>
+
+  <div *ngIf="!loading && !user" class="error">
+    Profil non trouvé
+  </div>
+
+  <div *ngIf="!loading && user" class="details-card">
+    <div class="header">
+      <button class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>Mon Profil</h1>
+    </div>
+
+    <div class="profile-content">
+      <div class="profile-avatar">
+        <div class="avatar-circle">
+          <span class="avatar-icon">👤</span>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="detail-row">
+          <div class="detail-label">Prénom</div>
+          <div class="detail-value">{{ user.firstName }}</div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-label">Nom</div>
+          <div class="detail-value">{{ user.lastName }}</div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-label">Email</div>
+          <div class="detail-value">{{ user.email }}</div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-label">Téléphone</div>
+          <div class="detail-value">{{ user.phoneNumber || '-' }}</div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-label">Rôle</div>
+          <div class="detail-value">
+            <span class="role-badge">{{ user.role }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

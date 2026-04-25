@@ -1,0 +1,76 @@
+<div class="container">
+  <form [formGroup]="ambulanceForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">🚑</div>
+      <h2>Création d'une Ambulance</h2>
+      <p class="subtitle">Veuillez remplir les informations ci-dessous</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Matricule *</label>
+        <input 
+          type="text" 
+          formControlName="matricule"
+          placeholder="Ex: AMB-2024-001">
+        <span class="error-message" *ngIf="ambulanceForm.get('matricule')?.invalid && ambulanceForm.get('matricule')?.touched">
+          Le matricule est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Type *</label>
+        <select formControlName="type">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let t of typesAmbulance" [value]="t">{{ t }}</option>
+        </select>
+        <span class="error-message" *ngIf="ambulanceForm.get('type')?.invalid && ambulanceForm.get('type')?.touched">
+          Le type est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <select formControlName="hopital">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+        <span class="error-message" *ngIf="ambulanceForm.get('hopital')?.invalid && ambulanceForm.get('hopital')?.touched">
+          L'hôpital est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="disponible">
+          <span>✓ Disponible</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Latitude</label>
+        <input 
+          type="number" 
+          formControlName="latitude"
+          placeholder="Ex: 36.8065"
+          step="any">
+      </div>
+
+      <div class="form-group">
+        <label>Longitude</label>
+        <input 
+          type="number" 
+          formControlName="longitude"
+          placeholder="Ex: 10.1815"
+          step="any">
+      </div>
+
+      <button type="submit" [disabled]="ambulanceForm.invalid" class="submit-btn">
+        <span *ngIf="!ambulanceForm.invalid">✓ Enregistrer l'ambulance</span>
+        <span *ngIf="ambulanceForm.invalid">⚠️ Veuillez remplir tous les champs obligatoires</span>
+      </button>
+    </div>
+
+  </form>
+</div>

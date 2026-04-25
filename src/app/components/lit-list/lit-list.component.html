@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Lits</h1>
+    <button class="btn-add" (click)="createLit()">
+      ➕ Créer un lit
+    </button>
+  </div>
+
+  <div class="filters-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterLits()"
+      placeholder="🔍 Rechercher par numéro..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedEtat" 
+      (change)="filterLits()"
+      class="filter-select">
+      <option value="">Tous les états</option>
+      <option *ngFor="let etat of etats" [value]="etat">{{ etat }}</option>
+    </select>
+
+    <select 
+      [(ngModel)]="selectedType" 
+      (change)="filterLits()"
+      class="filter-select">
+      <option value="">Tous les types</option>
+      <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+    </select>
+
+    <select 
+      [(ngModel)]="selectedHopital" 
+      (change)="filterLits()"
+      class="filter-select">
+      <option value="">Tous les hôpitaux</option>
+      <option *ngFor="let hopital of hopitaux" [value]="hopital.id">{{ hopital.nom }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredLits.length === 0" class="no-data">
+    Aucun lit trouvé
+  </div>
+
+  <div *ngIf="!loading && filteredLits.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Type</th>
+          <th>État</th>
+          <th>Hôpital</th>
+          <th>Occupé</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let lit of filteredLits" 
+          class="table-row">
+          <td class="matricule-cell" (click)="viewLitDetails(lit.id)">{{ lit.numero }}</td>
+          <td (click)="viewLitDetails(lit.id)">{{ lit.type }}</td>
+          <td (click)="viewLitDetails(lit.id)">{{ lit.etat }}</td>
+          <td (click)="viewLitDetails(lit.id)">{{ lit.hopital?.nom || '-' }}</td>
+          <td (click)="viewLitDetails(lit.id)">
+            <span [class.unavailable]="lit.estOccupe" [class.available]="!lit.estOccupe">
+              {{ lit.estOccupe ? '🔴 Oui' : '✓ Non' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteLit($event, lit.id, lit.numero)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

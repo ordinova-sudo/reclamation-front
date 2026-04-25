@@ -1,0 +1,135 @@
+.container {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.error {
+  color: #e74c3c;
+}
+
+.details-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-back {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.btn-back:hover {
+  background-color: #7f8c8d;
+}
+
+.header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+  flex: 1;
+}
+
+.profile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4e73df, #1cc88a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-icon {
+  font-size: 60px;
+  color: white;
+}
+
+.profile-details {
+  width: 100%;
+  max-width: 600px;
+}
+
+.detail-row {
+  display: flex;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: center;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #2c3e50;
+  width: 150px;
+  font-size: 14px;
+}
+
+.detail-value {
+  flex: 1;
+  color: #555;
+  font-size: 16px;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #4e73df, #1cc88a);
+  color: white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .detail-label {
+    width: 100%;
+  }
+}

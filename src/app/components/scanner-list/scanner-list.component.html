@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Scanners</h1>
+    <button class="btn-add" (click)="createScanner()">
+      ➕ Créer un scanner
+    </button>
+  </div>
+
+  <div class="filters-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterScanners()"
+      placeholder="🔍 Rechercher par modèle ou marque..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedEtat" 
+      (change)="filterScanners()"
+      class="filter-select">
+      <option value="">Tous les états</option>
+      <option *ngFor="let etat of etats" [value]="etat">{{ etat }}</option>
+    </select>
+
+    <select 
+      [(ngModel)]="selectedHopital" 
+      (change)="filterScanners()"
+      class="filter-select">
+      <option value="">Tous les hôpitaux</option>
+      <option *ngFor="let hopital of hopitaux" [value]="hopital.id">{{ hopital.nom }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredScanners.length === 0" class="no-data">
+    Aucun scanner trouvé
+  </div>
+
+  <div *ngIf="!loading && filteredScanners.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Modèle</th>
+          <th>Marque</th>
+          <th>État</th>
+          <th>Hôpital</th>
+          <th>Disponible</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let scanner of filteredScanners" 
+          class="table-row">
+          <td class="nom-cell" (click)="viewScannerDetails(scanner.id)">{{ scanner.modele }}</td>
+          <td (click)="viewScannerDetails(scanner.id)">{{ scanner.marque }}</td>
+          <td (click)="viewScannerDetails(scanner.id)">{{ scanner.etat }}</td>
+          <td (click)="viewScannerDetails(scanner.id)">{{ scanner.hopital?.nom || '-' }}</td>
+          <td (click)="viewScannerDetails(scanner.id)">
+            <span [class.available]="scanner.disponible" [class.unavailable]="!scanner.disponible">
+              {{ scanner.disponible ? '✓ Oui' : '✗ Non' }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteScanner($event, scanner.id, scanner.modele)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

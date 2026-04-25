@@ -1,0 +1,111 @@
+<div class="container">
+  <div *ngIf="loading" class="loading">
+    Chargement des détails...
+  </div>
+
+  <div *ngIf="!loading && !ambulanceForm.value.matricule" class="error">
+    Ambulance non trouvée
+  </div>
+
+  <div *ngIf="!loading && ambulanceForm.value.matricule" class="details-card">
+    <div class="header">
+      <button class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>{{ editMode ? 'Modifier l\'ambulance' : ambulanceForm.value.matricule }}</h1>
+      <button 
+        *ngIf="!editMode" 
+        class="btn-edit" 
+        (click)="toggleEditMode()">
+        ✏️ Modifier
+      </button>
+    </div>
+
+    <form [formGroup]="ambulanceForm" (ngSubmit)="onSubmit()" class="form-grid">
+      
+      <div class="form-group">
+        <label>Matricule *</label>
+        <input 
+          type="text" 
+          formControlName="matricule" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode">
+      </div>
+
+      <div class="form-group">
+        <label>Type *</label>
+        <select 
+          *ngIf="editMode"
+          formControlName="type">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let t of typesAmbulance" [value]="t">{{ t }}</option>
+        </select>
+        <input 
+          *ngIf="!editMode"
+          type="text" 
+          [value]="ambulanceForm.value.type"
+          readonly
+          class="readonly">
+      </div>
+
+      <div class="form-group">
+        <label>Hôpital *</label>
+        <input 
+          *ngIf="!editMode"
+          type="text" 
+          formControlName="hopitalNom"
+          readonly
+          class="readonly">
+        <select 
+          *ngIf="editMode"
+          formControlName="hopital"
+          [compareWith]="compareHopitals">
+          <option [ngValue]="null">-- Choisir un hôpital --</option>
+          <option *ngFor="let h of hopitals" [ngValue]="h">{{ h.nom }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Disponible</label>
+        <input 
+          *ngIf="!editMode"
+          type="text" 
+          [value]="ambulanceForm.value.disponible ? 'Oui' : 'Non'"
+          readonly
+          class="readonly">
+        <label *ngIf="editMode" class="checkbox-label">
+          <input type="checkbox" formControlName="disponible">
+          <span>✓ Disponible</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Latitude</label>
+        <input 
+          type="number" 
+          formControlName="latitude" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode"
+          step="any">
+      </div>
+
+      <div class="form-group">
+        <label>Longitude</label>
+        <input 
+          type="number" 
+          formControlName="longitude" 
+          [readonly]="!editMode"
+          [class.readonly]="!editMode"
+          step="any">
+      </div>
+
+      <div *ngIf="editMode" class="button-group">
+        <button type="submit" class="btn-save" [disabled]="ambulanceForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+          ❌ Annuler
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
