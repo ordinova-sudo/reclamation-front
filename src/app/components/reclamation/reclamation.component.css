@@ -65,6 +65,10 @@
   flex-direction: column;
 }
 
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
 .form-group label {
   font-size: 14px;
   font-weight: 600;
@@ -72,49 +76,38 @@
   color: #2c3e50;
 }
 
-.form-group input {
-  height: 45px;
-  padding: 0 15px;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 15px;
   border-radius: 10px;
   border: 2px solid #e0e0e0;
   font-size: 14px;
   transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
 }
 
-.form-group input:focus {
+.form-group input,
+.form-group select {
+  height: 45px;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #4e73df;
   box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
 }
 
-.password-group {
-  position: relative;
-}
-
-.password-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-input-wrapper input {
-  width: 100%;
-  padding-right: 45px;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-  transition: transform 0.2s;
-}
-
-.toggle-password:hover {
-  transform: scale(1.2);
+.form-group select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
 }
 
 .error-message {
@@ -124,19 +117,29 @@
   font-weight: 500;
 }
 
-.submit-btn {
+.button-group {
   grid-column: 1 / -1;
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.submit-btn,
+.cancel-btn {
+  flex: 1;
   height: 50px;
   border-radius: 25px;
   border: none;
-  background: linear-gradient(135deg, #3a5edc, #17a673);
-  color: white;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #3a5edc, #17a673);
+  color: white;
   box-shadow: 0 4px 15px rgba(78, 115, 223, 0.4);
-  margin-top: 10px;
 }
 
 .submit-btn:hover:not(:disabled) {
@@ -151,28 +154,16 @@
   transform: none;
 }
 
-.auth-link {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-top: 10px;
+.cancel-btn {
+  background: #95a5a6;
+  color: white;
+  box-shadow: 0 4px 15px rgba(149, 165, 166, 0.4);
 }
 
-.auth-link p {
-  color: #555;
-  font-size: 14px;
-  margin: 0;
-}
-
-.auth-link a {
-  color: #4e73df;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-.auth-link a:hover {
-  color: #1cc88a;
-  text-decoration: underline;
+.cancel-btn:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(149, 165, 166, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -191,5 +182,9 @@
 
   .header-icon {
     font-size: 50px;
+  }
+
+  .button-group {
+    flex-direction: column;
   }
 }

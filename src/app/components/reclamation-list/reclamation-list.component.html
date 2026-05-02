@@ -1,0 +1,94 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Réclamations</h1>
+    <button class="btn-add" (click)="createReclamation()">
+      ➕ Créer une réclamation
+    </button>
+  </div>
+
+  <div class="filters-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterReclamations()"
+      placeholder="🔍 Rechercher par sujet ou description..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedType" 
+      (change)="filterReclamations()"
+      class="filter-select">
+      <option value="">Tous les types</option>
+      <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+    </select>
+
+    <select 
+      [(ngModel)]="selectedStatus" 
+      (change)="filterReclamations()"
+      class="filter-select">
+      <option value="">Tous les statuts</option>
+      <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredReclamations.length === 0" class="no-data">
+    Aucune réclamation trouvée
+  </div>
+
+  <div *ngIf="!loading && filteredReclamations.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Sujet</th>
+          <th>Type</th>
+          <th>Statut</th>
+          <th>Description</th>
+          <th>Utilisateur</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let reclamation of filteredReclamations" 
+          class="table-row">
+          <td class="date-cell" (click)="viewReclamationDetails(reclamation.id)">
+            {{ formatDate(reclamation.dateCreation) }}
+          </td>
+          <td class="sujet-cell" (click)="viewReclamationDetails(reclamation.id)">
+            {{ reclamation.sujet }}
+          </td>
+          <td (click)="viewReclamationDetails(reclamation.id)">
+            <span class="type-badge" [ngClass]="'type-' + reclamation.typeCible">
+              {{ reclamation.typeCible }}
+            </span>
+          </td>
+          <td (click)="viewReclamationDetails(reclamation.id)">
+            <span class="status-badge" [ngClass]="'status-' + reclamation.statut">
+              {{ reclamation.statut }}
+            </span>
+          </td>
+          <td class="description-cell" (click)="viewReclamationDetails(reclamation.id)">
+            {{ reclamation.description.length > 50 ? reclamation.description.substring(0, 50) + '...' : reclamation.description }}
+          </td>
+          <td (click)="viewReclamationDetails(reclamation.id)">
+            {{ reclamation.firstName }} {{ reclamation.lastName }}
+          </td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteReclamation($event, reclamation.id, reclamation.sujet)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -11,43 +11,78 @@
     <div class="header">
       <button class="btn-back" (click)="goBack()">← Retour</button>
       <h1>Mon Profil</h1>
+      <button 
+        class="btn-edit" 
+        (click)="toggleEditMode()"
+        *ngIf="!isEditMode">
+        ✏️ Modifier
+      </button>
     </div>
 
-    <div class="profile-content">
-      <div class="profile-avatar">
-        <div class="avatar-circle">
-          <span class="avatar-icon">👤</span>
-        </div>
-      </div>
-
-      <div class="profile-details">
-        <div class="detail-row">
-          <div class="detail-label">Prénom</div>
-          <div class="detail-value">{{ user.firstName }}</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Nom</div>
-          <div class="detail-value">{{ user.lastName }}</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Email</div>
-          <div class="detail-value">{{ user.email }}</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Téléphone</div>
-          <div class="detail-value">{{ user.phoneNumber || '-' }}</div>
-        </div>
-
-        <div class="detail-row">
-          <div class="detail-label">Rôle</div>
-          <div class="detail-value">
-            <span class="role-badge">{{ user.role }}</span>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div class="profile-content">
+        <div class="profile-avatar">
+          <div class="avatar-circle">
+            <span class="avatar-icon">👤</span>
           </div>
         </div>
+
+        <div class="profile-details">
+          <div class="detail-row">
+            <div class="detail-label">Prénom</div>
+            <div class="detail-value">{{ user.firstName }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Nom</div>
+            <div class="detail-value">{{ user.lastName }}</div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Email *</div>
+            <div class="detail-value">
+              <input 
+                type="email" 
+                formControlName="email"
+                [class.readonly]="!isEditMode"
+                class="input-field">
+              <span class="error-message" *ngIf="isEditMode && profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                Email valide requis
+              </span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Téléphone *</div>
+            <div class="detail-value">
+              <input 
+                type="text" 
+                formControlName="phoneNumber"
+                [class.readonly]="!isEditMode"
+                class="input-field">
+              <span class="error-message" *ngIf="isEditMode && profileForm.get('phoneNumber')?.invalid && profileForm.get('phoneNumber')?.touched">
+                Numéro valide requis (8-15 chiffres)
+              </span>
+            </div>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-label">Rôle</div>
+            <div class="detail-value">
+              <span class="role-badge">{{ user.role }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-buttons" *ngIf="isEditMode">
+          <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+            ✗ Annuler
+          </button>
+          <button type="submit" class="btn-save" [disabled]="profileForm.invalid">
+            ✓ Enregistrer
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

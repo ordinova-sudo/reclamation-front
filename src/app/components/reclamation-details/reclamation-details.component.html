@@ -1,0 +1,115 @@
+<div class="container">
+  <div class="details-card" *ngIf="!loading">
+    
+    <div class="header">
+      <button type="button" class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>{{ isEditMode ? 'Modifier la Réclamation' : reclamationForm.value.sujet || 'Détails de la Réclamation' }}</h1>
+      <button 
+        type="button" 
+        *ngIf="!isEditMode"
+        class="btn-edit" 
+        (click)="toggleEditMode()">
+        ✏️ Modifier
+      </button>
+    </div>
+
+    <form [formGroup]="reclamationForm" (ngSubmit)="onSubmit()" class="details-content">
+      
+      <div class="info-grid">
+        <div class="info-group full-width">
+          <label>Sujet</label>
+          <input 
+            type="text" 
+            formControlName="sujet"
+            [readonly]="!isEditMode">
+          <span class="error-message" *ngIf="isEditMode && reclamationForm.get('sujet')?.invalid && reclamationForm.get('sujet')?.touched">
+            Le sujet est obligatoire (min. 3 caractères)
+          </span>
+        </div>
+
+        <div class="info-group">
+          <label>Type de cible</label>
+          <input 
+            type="text" 
+            [value]="reclamationForm.get('typeCible')?.value"
+            readonly
+            disabled
+            class="readonly">
+        </div>
+
+        <div class="info-group">
+          <label>Équipement concerné</label>
+          <input 
+            *ngIf="!isEditMode"
+            type="text" 
+            [value]="getSelectedCibleLabel()"
+            readonly
+            class="readonly">
+          <select 
+            *ngIf="isEditMode"
+            formControlName="cibleId">
+            <option value="">-- Choisir un équipement --</option>
+            <option *ngFor="let cible of cibles" [value]="cible.id">
+              {{ getCibleLabel(cible) }}
+            </option>
+          </select>
+          <span class="error-message" *ngIf="isEditMode && reclamationForm.get('cibleId')?.invalid && reclamationForm.get('cibleId')?.touched">
+            L'équipement est obligatoire
+          </span>
+        </div>
+
+        <div class="info-group">
+          <label>Statut</label>
+          <select formControlName="statut" [disabled]="!isEditMode">
+            <option value="">-- Choisir un statut --</option>
+            <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+          </select>
+          <span class="error-message" *ngIf="isEditMode && reclamationForm.get('statut')?.invalid && reclamationForm.get('statut')?.touched">
+            Le statut est obligatoire
+          </span>
+        </div>
+
+        <div class="info-group full-width">
+          <label>Description</label>
+          <textarea 
+            formControlName="description"
+            rows="5"
+            [readonly]="!isEditMode"></textarea>
+          <span class="error-message" *ngIf="isEditMode && reclamationForm.get('description')?.invalid && reclamationForm.get('description')?.touched">
+            La description est obligatoire (min. 10 caractères)
+          </span>
+        </div>
+
+        <div class="info-group">
+          <label>Date de création</label>
+          <input 
+            type="text" 
+            [value]="formatDate(reclamationForm.get('dateCreation')?.value)"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Créé par</label>
+          <input 
+            type="text" 
+            [value]="(reclamationForm.get('firstName')?.value || '') + ' ' + (reclamationForm.get('lastName')?.value || '')"
+            readonly>
+        </div>
+      </div>
+
+      <div *ngIf="isEditMode" class="button-group">
+        <button type="submit" class="btn-save" [disabled]="reclamationForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+          ❌ Annuler
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <p>Chargement...</p>
+  </div>
+</div>

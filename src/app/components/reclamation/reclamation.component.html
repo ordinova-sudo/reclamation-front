@@ -1,0 +1,69 @@
+<div class="container">
+  <form [formGroup]="reclamationForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">📋</div>
+      <h2>Créer une Réclamation</h2>
+      <p class="subtitle">Signalez un problème concernant un équipement</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label>Sujet *</label>
+        <input 
+          type="text" 
+          formControlName="sujet"
+          placeholder="Ex: Panne d'ambulance">
+        <span class="error-message" *ngIf="reclamationForm.get('sujet')?.invalid && reclamationForm.get('sujet')?.touched">
+          Le sujet est obligatoire (min. 3 caractères)
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Type de cible *</label>
+        <select formControlName="typeCible">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+        </select>
+        <span class="error-message" *ngIf="reclamationForm.get('typeCible')?.invalid && reclamationForm.get('typeCible')?.touched">
+          Le type est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label>Équipement concerné *</label>
+        <select formControlName="cibleId" [disabled]="!reclamationForm.get('typeCible')?.value">
+          <option value="">-- Choisir un équipement --</option>
+          <option *ngFor="let cible of cibles" [value]="cible.id">
+            {{ getCibleLabel(cible) }}
+          </option>
+        </select>
+        <span class="error-message" *ngIf="reclamationForm.get('cibleId')?.invalid && reclamationForm.get('cibleId')?.touched">
+          L'équipement est obligatoire
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Description *</label>
+        <textarea 
+          formControlName="description"
+          rows="5"
+          placeholder="Décrivez le problème en détail..."></textarea>
+        <span class="error-message" *ngIf="reclamationForm.get('description')?.invalid && reclamationForm.get('description')?.touched">
+          La description est obligatoire (min. 10 caractères)
+        </span>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="cancel-btn" (click)="cancel()">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="reclamationForm.invalid || loading" class="submit-btn">
+          <span *ngIf="!loading">✓ Enregistrer</span>
+          <span *ngIf="loading">⏳ Enregistrement...</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

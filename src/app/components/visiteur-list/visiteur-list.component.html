@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des Visiteurs</h1>
+  </div>
+
+  <div class="search-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterVisiteurs()"
+      placeholder="🔍 Rechercher par nom ou email..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedStatus" 
+      (change)="filterVisiteurs()"
+      class="filter-select">
+      <option value="">Tous les statuts</option>
+      <option value="active">Activés</option>
+      <option value="inactive">Désactivés</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && filteredVisiteurs.length === 0" class="no-data">
+    Aucun visiteur trouvé
+  </div>
+
+  <div *ngIf="!loading && filteredVisiteurs.length > 0" class="table-container">
+    <table class="agent-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Email</th>
+          <th>Téléphone</th>
+          <th>Rôle</th>
+          <th>Statut</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let visiteur of filteredVisiteurs" 
+          class="table-row">
+          <td class="nom-cell">{{ visiteur.lastName }}</td>
+          <td>{{ visiteur.firstName }}</td>
+          <td>{{ visiteur.email }}</td>
+          <td>{{ visiteur.phoneNumber }}</td>
+          <td>
+            <span class="role-badge">{{ visiteur.role }}</span>
+          </td>
+          <td class="status-cell">
+            <label class="switch" (click)="$event.stopPropagation()">
+              <input 
+                type="checkbox" 
+                [checked]="visiteur.enabled"
+                (change)="toggleStatus($event, visiteur)">
+              <span class="slider"></span>
+            </label>
+            <span class="status-text" [class.active]="visiteur.enabled">
+              {{ visiteur.enabled ? 'Activé' : 'Désactivé' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

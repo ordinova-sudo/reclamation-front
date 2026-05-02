@@ -1,0 +1,81 @@
+<div class="container">
+  <div class="details-card" *ngIf="!loading && visiteur">
+    
+    <div class="card-header">
+      <div class="header-icon">👤</div>
+      <h2>Détails du Visiteur</h2>
+      <p class="subtitle">Informations du visiteur</p>
+    </div>
+
+    <div class="details-content">
+      
+      <div class="info-grid">
+        <div class="info-group">
+          <label>Nom</label>
+          <input 
+            type="text" 
+            [value]="visiteur.lastName"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Prénom</label>
+          <input 
+            type="text" 
+            [value]="visiteur.firstName"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Email</label>
+          <input 
+            type="text" 
+            [value]="visiteur.email"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Téléphone</label>
+          <input 
+            type="text" 
+            [value]="visiteur.phoneNumber"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Rôle</label>
+          <input 
+            type="text" 
+            [value]="visiteur.role"
+            readonly>
+        </div>
+
+        <div class="info-group" *ngIf="visiteur.createdAt">
+          <label>Date de création</label>
+          <input 
+            type="text" 
+            [value]="visiteur.createdAt | date:'dd/MM/yyyy HH:mm'"
+            readonly>
+        </div>
+      </div>
+
+      <div class="action-buttons">
+        <button type="button" class="btn-back" (click)="goBack()">
+          ← Retour à la liste
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <p>Chargement...</p>
+  </div>
+
+  <div class="error-container" *ngIf="!loading && !visiteur">
+    <p>Visiteur non trouvé</p>
+    <button type="button" class="btn-back" (click)="goBack()">
+      ← Retour à la liste
+    </button>
+  </div>
+</div>

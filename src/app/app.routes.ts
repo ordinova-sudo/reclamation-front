@@ -22,6 +22,11 @@ import { ScannerComponent } from './components/scanner/scanner.component';
 import { ScannerListComponent } from './components/scanner-list/scanner-list.component';
 import { ScannerDetailsComponent } from './components/scanner-details/scanner-details.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
+import { ReclamationComponent } from './components/reclamation/reclamation.component';
+import { ReclamationDetailsComponent } from './components/reclamation-details/reclamation-details.component';
+import { VisiteurListComponent } from './components/visiteur-list/visiteur-list.component';
+import { VisiteurDetailsComponent } from './components/visiteur-details/visiteur-details.component';
 
 
 export const routes: Routes = [
@@ -51,6 +56,11 @@ export const routes: Routes = [
         { path: 'addScanner', component: ScannerComponent },
         { path: 'scanner-list', component: ScannerListComponent },
         { path: 'scanner-details/:id', component: ScannerDetailsComponent },
+        { path: 'addReclamation', component: ReclamationComponent },
+        { path: 'reclamation-list', component: ReclamationListComponent },
+        { path: 'reclamation-details/:id', component: ReclamationDetailsComponent },
+        { path: 'visiteur-list', component: VisiteurListComponent },
+        { path: 'visiteur-details/:id', component: VisiteurDetailsComponent },
         { path: 'profile', component: UserProfileComponent }
       ]
     },
