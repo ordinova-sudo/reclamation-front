@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AgentHospitaliseService } from '../../services/agent-hospitalise.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-agent-list',
@@ -18,6 +19,11 @@ export class AgentListComponent implements OnInit {
   filteredAgents: any[] = [];
   loading: boolean = true;
   searchTerm: string = '';
+  
+  // Pagination
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
 
   constructor(
     private agentService: AgentHospitaliseService,
@@ -35,10 +41,11 @@ export class AgentListComponent implements OnInit {
   }
 
   loadAgents(): void {
-    this.agentService.getAllAgents().subscribe({
-      next: (data) => {
-        this.agents = data;
-        this.filteredAgents = data;
+    this.agentService.getAllAgents(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.agents = response.content || [];
+        this.filteredAgents = this.agents;
+        this.totalPages = response.totalPages || 0;
         this.loading = false;
       },
       error: (err) => {
@@ -57,6 +64,31 @@ export class AgentListComponent implements OnInit {
         agent.email.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
     }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadAgents();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadAgents();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadAgents();
+    }
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   viewAgentDetails(id: number): void {

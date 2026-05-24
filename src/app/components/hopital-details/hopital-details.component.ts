@@ -44,6 +44,13 @@ export class HopitalDetailsComponent implements OnInit {
     'Tataouine','Gafsa','Tozeur','Kébili'
   ];
 
+  typesHopital = [
+    { value: 'UNIVERSITAIRE', label: 'Universitaire' },
+    { value: 'MILITAIRE', label: 'Militaire' },
+    { value: 'REGIONAL', label: 'Régional' },
+    { value: 'DISTRICT', label: 'District' }
+  ];
+
   constructor(
     private hopitalService: HopitalService,
     private route: ActivatedRoute,
@@ -67,6 +74,7 @@ export class HopitalDetailsComponent implements OnInit {
   loadHopitalDetails(id: number): void {
     this.hopitalService.getHopitalById(id).subscribe({
       next: (data) => {
+        console.log('Données hôpital reçues:', data); // Debug
         this.hopitalForm.patchValue(data);
         this.loading = false;
       },

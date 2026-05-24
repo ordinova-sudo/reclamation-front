@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="details-card" *ngIf="!loading">
+    
+    <div class="header">
+      <button type="button" class="btn-back" (click)="goBack()">← Retour</button>
+      <h1>{{ isEditMode ? 'Modifier la Panne Technique' : incidentForm.value.sujet || 'Détails de la Panne Technique' }}</h1>
+      <button 
+        type="button" 
+        *ngIf="!isEditMode"
+        class="btn-edit" 
+        (click)="toggleEditMode()">
+        ✏️ Modifier
+      </button>
+    </div>
+
+    <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="details-content">
+      
+      <div class="info-grid">
+        <div class="info-group">
+          <label>Sujet</label>
+          <input 
+            type="text" 
+            formControlName="sujet"
+            [readonly]="!isEditMode">
+          <span class="error-message" *ngIf="isEditMode && incidentForm.get('sujet')?.invalid && incidentForm.get('sujet')?.touched">
+            Le sujet est obligatoire (min. 3 caractères)
+          </span>
+        </div>
+
+        <div class="info-group">
+          <label>Statut</label>
+          <select formControlName="statut" [disabled]="!isEditMode">
+            <option value="">-- Choisir un statut --</option>
+            <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+          </select>
+          <span class="error-message" *ngIf="isEditMode && incidentForm.get('statut')?.invalid && incidentForm.get('statut')?.touched">
+            Le statut est obligatoire
+          </span>
+        </div>
+
+        <div class="info-group full-width">
+          <label>Description</label>
+          <textarea 
+            formControlName="description"
+            rows="5"
+            [readonly]="!isEditMode"></textarea>
+          <span class="error-message" *ngIf="isEditMode && incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched">
+            La description est obligatoire (min. 10 caractères)
+          </span>
+        </div>
+
+        <div class="info-group">
+          <label>Créé par</label>
+          <input 
+            type="text" 
+            [value]="(incidentForm.get('firstName')?.value || '') + ' ' + (incidentForm.get('lastName')?.value || '')"
+            readonly>
+        </div>
+
+        <div class="info-group">
+          <label>Date de création</label>
+          <input 
+            type="text" 
+            [value]="formatDate(incidentForm.get('dateCreation')?.value)"
+            readonly>
+        </div>
+      </div>
+
+      <div *ngIf="isEditMode" class="button-group">
+        <button type="submit" class="btn-save" [disabled]="incidentForm.invalid">
+          💾 Enregistrer
+        </button>
+        <button type="button" class="btn-cancel" (click)="toggleEditMode()">
+          ❌ Annuler
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <p>Chargement...</p>
+  </div>
+</div>

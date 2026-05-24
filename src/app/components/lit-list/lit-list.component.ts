@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LitService } from '../../services/lit.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-lit-list',
@@ -22,6 +23,11 @@ export class LitListComponent implements OnInit {
   selectedEtat: string = '';
   selectedType: string = '';
   selectedHopital: string = '';
+  
+  // Pagination
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
   
   etats = ['PROPRE', 'SALE', 'EN_MAINTENANCE'];
   types = ['STANDARD', 'REANIMATION', 'URGENCE', 'PEDIATRIQUE', 'MATERNITE', 'CHIRURGICAL', 'LONGUE_DUREE', 'PSYCHIATRIQUE', 'ISOLEMENT', 'SOINS_PALLIATIFS'];
@@ -42,10 +48,11 @@ export class LitListComponent implements OnInit {
   }
 
   loadLits(): void {
-    this.litService.getAllLits().subscribe({
-      next: (data) => {
-        this.lits = data;
-        this.filteredLits = data;
+    this.litService.getAllLits(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.lits = response.content || [];
+        this.filteredLits = this.lits;
+        this.totalPages = response.totalPages || 0;
         this.extractHopitaux();
         this.loading = false;
       },
@@ -82,6 +89,31 @@ export class LitListComponent implements OnInit {
       
       return matchesSearch && matchesEtat && matchesType && matchesHopital;
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadLits();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadLits();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadLits();
+    }
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   viewLitDetails(id: number): void {

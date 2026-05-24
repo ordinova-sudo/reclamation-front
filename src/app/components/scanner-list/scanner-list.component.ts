@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ScannerService } from '../../services/scanner.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-scanner-list',
@@ -21,6 +22,11 @@ export class ScannerListComponent implements OnInit {
   searchTerm: string = '';
   selectedEtat: string = '';
   selectedHopital: string = '';
+  
+  // Pagination
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
   
   etats = ['FONCTIONNEL', 'EN_PANNE', 'MAINTENANCE'];
 
@@ -40,10 +46,11 @@ export class ScannerListComponent implements OnInit {
   }
 
   loadScanners(): void {
-    this.scannerService.getAllScanners().subscribe({
-      next: (data) => {
-        this.scanners = data;
-        this.filteredScanners = data;
+    this.scannerService.getAllScanners(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.scanners = response.content || [];
+        this.filteredScanners = this.scanners;
+        this.totalPages = response.totalPages || 0;
         this.extractHopitaux();
         this.loading = false;
       },
@@ -78,6 +85,31 @@ export class ScannerListComponent implements OnInit {
       
       return matchesSearch && matchesEtat && matchesHopital;
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadScanners();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadScanners();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadScanners();
+    }
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   viewScannerDetails(id: number): void {

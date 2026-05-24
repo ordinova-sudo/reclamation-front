@@ -1,0 +1,45 @@
+<div class="container">
+  <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="form-card">
+    
+    <div class="form-header">
+      <div class="header-icon">⚠️</div>
+      <h2>Signaler une Panne Technique</h2>
+      <p class="subtitle">Déclarez une panne technique ou un problème</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group full-width">
+        <label>Sujet *</label>
+        <input 
+          type="text" 
+          formControlName="sujet"
+          placeholder="Ex: Problème technique">
+        <span class="error-message" *ngIf="incidentForm.get('sujet')?.invalid && incidentForm.get('sujet')?.touched">
+          Le sujet est obligatoire (min. 3 caractères)
+        </span>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Description *</label>
+        <textarea 
+          formControlName="description"
+          rows="5"
+          placeholder="Décrivez la panne technique en détail..."></textarea>
+        <span class="error-message" *ngIf="incidentForm.get('description')?.invalid && incidentForm.get('description')?.touched">
+          La description est obligatoire (min. 10 caractères)
+        </span>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="cancel-btn" (click)="cancel()">
+          Annuler
+        </button>
+        <button type="submit" [disabled]="incidentForm.invalid || loading" class="submit-btn">
+          <span *ngIf="!loading">✓ Enregistrer</span>
+          <span *ngIf="loading">⏳ Enregistrement...</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</div>

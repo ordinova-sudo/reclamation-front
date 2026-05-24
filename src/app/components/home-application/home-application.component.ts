@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home-application',
@@ -17,13 +17,26 @@ export class HomeApplicationComponent implements OnInit {
   selectedMenu: string = 'home';
   userProfile: any = null;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
   }
 
   loadUserProfile(): void {
+    // Vérifier si on est côté navigateur
+    if (!isPlatformBrowser(this.platformId)) {
+      this.userProfile = {
+        firstName: 'Utilisateur',
+        lastName: '',
+        role: 'USER'
+      };
+      return;
+    }
+    
     // Récupérer les infos du localStorage (stockées lors de la connexion)
     const token = localStorage.getItem('token');
     console.log('Token trouvé:', token ? 'Oui' : 'Non');
@@ -60,6 +73,11 @@ export class HomeApplicationComponent implements OnInit {
   }
 
   logout(): void {
+    // Vérifier si on est côté navigateur
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     // Supprimer le token et rediriger vers la page de connexion
     localStorage.removeItem('token');
     this.router.navigate(['/login']);

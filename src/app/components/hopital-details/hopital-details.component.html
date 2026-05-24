@@ -105,6 +105,28 @@
       </div>
 
       <div class="form-group">
+        <label>Type *</label>
+        <select 
+          formControlName="type" 
+          [disabled]="!editMode"
+          [class.readonly]="!editMode">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let type of typesHopital" [value]="type.value">{{ type.label }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Service d'urgence (SAMU)</label>
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            formControlName="urgence"
+            [disabled]="!editMode">
+          Disponible
+        </label>
+      </div>
+
+      <div class="form-group">
         <label>Heure ouverture</label>
         <input 
           type="time" 
@@ -129,38 +151,6 @@
           rows="3"
           [readonly]="!editMode"
           [class.readonly]="!editMode"></textarea>
-      </div>
-
-      <div class="form-group full-width">
-        <label>Type *</label>
-        <div class="radio-group">
-          <label>
-            <input 
-              type="radio" 
-              value="PUBLIC" 
-              formControlName="type"
-              [disabled]="!editMode">
-            Public
-          </label>
-          <label>
-            <input 
-              type="radio" 
-              value="PRIVE" 
-              formControlName="type"
-              [disabled]="!editMode">
-            Privé
-          </label>
-        </div>
-      </div>
-
-      <div class="form-group full-width">
-        <label>
-          <input 
-            type="checkbox" 
-            formControlName="urgence"
-            [disabled]="!editMode">
-          Service d'urgence (SAMU)
-        </label>
       </div>
 
       <div *ngIf="editMode" class="button-group">

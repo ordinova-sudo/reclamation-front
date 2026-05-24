@@ -1,22 +1,599 @@
 .dashboard {
-  text-align: center;
+  padding: 20px;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-.dashboard h1 {
-  color: #333;
+.header {
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.dashboard p {
-  color: #666;
-  font-size: 18px;
-  margin-bottom: 30px;
+.header h1 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  font-size: 28px;
 }
 
-.dashboard img {
-  max-width: 600px;
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
+.header p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 16px;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.legend-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.legend-icon.hospital {
+  background-color: #3498db;
+  color: white;
+}
+
+.legend-icon.samu {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.legend-icon.user {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-location {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-location:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-location:active {
+  transform: translateY(0);
+}
+
+.btn-nearest {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.btn-nearest:hover:not(:disabled) {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-nearest:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-nearest:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  min-height: 600px;
+  height: 600px;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-overlay p {
+  font-size: 18px;
+  color: #3498db;
+  font-weight: 600;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 40px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border-radius: 50%;
+}
+
+.stat-content h3 {
+  margin: 0;
+  font-size: 32px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.stat-content p {
+  margin: 5px 0 0 0;
+  color: #7f8c8d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Fix pour les icônes Leaflet */
+:host ::ng-deep .leaflet-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+:host ::ng-deep .leaflet-container {
+  font-family: Arial, sans-serif;
+}
+
+/* Icônes personnalisées SVG */
+:host ::ng-deep .custom-hospital-icon,
+:host ::ng-deep .custom-samu-icon,
+:host ::ng-deep .custom-user-icon,
+:host ::ng-deep .custom-nearest-samu-icon {
+  background: transparent !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:host ::ng-deep .custom-hospital-icon svg,
+:host ::ng-deep .custom-samu-icon svg,
+:host ::ng-deep .custom-user-icon svg,
+:host ::ng-deep .custom-nearest-samu-icon svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s;
+}
+
+:host ::ng-deep .custom-hospital-icon:hover svg,
+:host ::ng-deep .custom-samu-icon:hover svg {
+  transform: scale(1.1);
+}
+
+:host ::ng-deep .custom-user-icon svg {
+  animation: pulse-user 2s infinite;
+}
+
+:host ::ng-deep .custom-nearest-samu-icon svg {
+  animation: pulse-nearest 2s infinite;
+}
+
+@keyframes pulse-user {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+@keyframes pulse-nearest {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Forcer l'affichage correct des CircleMarkers */
+:host ::ng-deep .leaflet-interactive {
+  cursor: pointer;
+}
+
+:host ::ng-deep .leaflet-marker-icon {
+  display: block !important;
+}
+
+:host ::ng-deep .leaflet-marker-pane img {
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* S'assurer que les popups s'affichent correctement */
+:host ::ng-deep .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+:host ::ng-deep .leaflet-popup-content {
+  margin: 10px;
+  line-height: 1.4;
+}
+
+/* Marqueurs personnalisés */
+:host ::ng-deep .custom-marker {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid white;
+  transition: transform 0.2s;
+}
+
+:host ::ng-deep .custom-marker:hover {
+  transform: scale(1.15);
+}
+
+:host ::ng-deep .hospital-marker {
+  background-color: #3498db;
+}
+
+:host ::ng-deep .samu-marker {
+  background-color: #e74c3c;
+}
+
+:host ::ng-deep .user-marker {
+  background-color: #4CAF50;
+  width: 40px;
+  height: 40px;
+  animation: pulse-user 2s infinite;
+}
+
+:host ::ng-deep .nearest-samu-marker {
+  background-color: #e74c3c;
+  width: 44px;
+  height: 44px;
+  border: 3px solid #4CAF50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(76, 175, 80, 0.3);
+  animation: pulse-nearest 2s infinite;
+}
+
+:host ::ng-deep .marker-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+:host ::ng-deep .user-marker .marker-emoji {
+  font-size: 24px;
+}
+
+:host ::ng-deep .nearest-samu-marker .marker-emoji {
+  font-size: 24px;
+}
+
+@keyframes pulse-user {
+  0% {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  50% {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes pulse-nearest {
+  0% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(76, 175, 80, 0.7);
+  }
+  50% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 12px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(76, 175, 80, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 10px;
+  }
+
+  .header h1 {
+    font-size: 22px;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .map-container {
+    min-height: 400px;
+    height: 400px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+  
+  :host ::ng-deep .custom-marker {
+    width: 30px;
+    height: 30px;
+  }
+  
+  :host ::ng-deep .marker-emoji {
+    font-size: 16px;
+  }
+}
+/* Animation pour le marqueur de position utilisateur */
+:host ::ng-deep .user-location-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+:host ::ng-deep .nearest-samu-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+
+/* Dashboard Statistiques */
+.dashboard-stats {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stats-title {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 28px;
+  margin: 0 0 30px 0;
+  font-weight: 700;
+}
+
+.stats-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  color: #34495e;
+  font-size: 20px;
+  margin: 0 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #3498db;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-box {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.stat-box.success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stat-box.danger {
+  background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+}
+
+.stat-box.warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-box.highlight {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.stat-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.stat-count {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.top-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.top-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.top-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.top-rank {
+  font-size: 32px;
+  font-weight: 700;
+  color: #3498db;
+  min-width: 60px;
+  text-align: center;
+}
+
+.top-info {
+  flex: 1;
+}
+
+.top-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.top-email {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 5px;
+}
+
+.top-count {
+  font-size: 16px;
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.loading-stats {
+  text-align: center;
+  padding: 40px;
+  font-size: 18px;
+  color: #3498db;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-title {
+    font-size: 22px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+  }
+  
+  .stat-number {
+    font-size: 32px;
+  }
+  
+  .top-rank {
+    font-size: 24px;
+    min-width: 50px;
+  }
+  
+  .top-name {
+    font-size: 16px;
+  }
 }

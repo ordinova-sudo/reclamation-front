@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AmbulanceService } from '../../services/ambulance.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-ambulance-list',
@@ -21,6 +22,11 @@ export class AmbulanceListComponent implements OnInit {
   searchTerm: string = '';
   selectedType: string = '';
   selectedHopital: string = '';
+  
+  // Pagination
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
   
   types = ['MEDICALISEE', 'TRANSPORT_SIMPLE'];
 
@@ -40,10 +46,11 @@ export class AmbulanceListComponent implements OnInit {
   }
 
   loadAmbulances(): void {
-    this.ambulanceService.getAllAmbulances().subscribe({
-      next: (data) => {
-        this.ambulances = data;
-        this.filteredAmbulances = data;
+    this.ambulanceService.getAllAmbulances(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.ambulances = response.content || [];
+        this.filteredAmbulances = this.ambulances;
+        this.totalPages = response.totalPages || 0;
         this.extractHopitaux();
         this.loading = false;
       },
@@ -77,6 +84,31 @@ export class AmbulanceListComponent implements OnInit {
       
       return matchesSearch && matchesType && matchesHopital;
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadAmbulances();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadAmbulances();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadAmbulances();
+    }
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   viewAmbulanceDetails(id: number): void {

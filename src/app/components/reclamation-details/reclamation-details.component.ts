@@ -85,17 +85,17 @@ export class ReclamationDetailsComponent implements OnInit {
     if (!type) return;
 
     if (type === 'AMBULANCE') {
-      this.ambulanceService.getAllAmbulances().subscribe({
+      this.ambulanceService.getAllAmbulancesNoPagination().subscribe({
         next: (data) => this.cibles = data,
         error: (err) => console.error('Erreur chargement ambulances', err)
       });
     } else if (type === 'SCANNER') {
-      this.scannerService.getAllScanners().subscribe({
+      this.scannerService.getAllScannersNoPagination().subscribe({
         next: (data) => this.cibles = data,
         error: (err) => console.error('Erreur chargement scanners', err)
       });
     } else if (type === 'LIT') {
-      this.litService.getAllLits().subscribe({
+      this.litService.getAllLitsNoPagination().subscribe({
         next: (data) => this.cibles = data,
         error: (err) => console.error('Erreur chargement lits', err)
       });

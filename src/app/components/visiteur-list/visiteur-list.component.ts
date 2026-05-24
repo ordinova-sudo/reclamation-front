@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { VisiteurService } from '../../services/visiteur.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-visiteur-list',
@@ -19,6 +20,11 @@ export class VisiteurListComponent implements OnInit {
   loading: boolean = true;
   searchTerm: string = '';
   selectedStatus: string = '';
+  
+  // Pagination
+  currentPage: number = 0;
+  totalPages: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
 
   constructor(
     private visiteurService: VisiteurService,
@@ -36,10 +42,11 @@ export class VisiteurListComponent implements OnInit {
   }
 
   loadVisiteurs(): void {
-    this.visiteurService.getAllVisiteurs().subscribe({
-      next: (data) => {
-        this.visiteurs = data;
-        this.filteredVisiteurs = data;
+    this.visiteurService.getAllVisiteurs(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.visiteurs = response.content || [];
+        this.filteredVisiteurs = this.visiteurs;
+        this.totalPages = response.totalPages || 0;
         this.loading = false;
       },
       error: (err) => {
@@ -62,6 +69,31 @@ export class VisiteurListComponent implements OnInit {
       
       return matchesSearch && matchesStatus;
     });
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadVisiteurs();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.loadVisiteurs();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadVisiteurs();
+    }
+  }
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   toggleStatus(event: Event, visiteur: any): void {

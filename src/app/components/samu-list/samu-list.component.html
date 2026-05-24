@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="header-section">
+    <h1>Liste des SAMU</h1>
+    <button class="btn-add" (click)="createSamu()">
+      ➕ Créer un SAMU
+    </button>
+  </div>
+
+  <div class="filters-container">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm" 
+      (input)="filterSamus()"
+      placeholder="🔍 Rechercher par nom ou ville..."
+      class="search-input"
+    />
+
+    <select 
+      [(ngModel)]="selectedGouvernorat" 
+      (change)="filterSamus()"
+      class="filter-select">
+      <option value="">Tous les gouvernorats</option>
+      <option *ngFor="let gouv of gouvernorats" [value]="gouv">{{ gouv }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Chargement...
+  </div>
+
+  <div *ngIf="!loading && paginatedSamus.length === 0" class="no-data">
+    Aucun SAMU trouvé
+  </div>
+
+  <div *ngIf="!loading && paginatedSamus.length > 0" class="table-container">
+    <table class="samu-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Gouvernorat</th>
+          <th>Ville</th>
+          <th>Téléphone</th>
+          <th>Email</th>
+          <th>Hôpital</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let samu of paginatedSamus" 
+          class="table-row">
+          <td class="nom-cell" (click)="viewSamuDetails(samu.id)">{{ samu.nom }}</td>
+          <td (click)="viewSamuDetails(samu.id)">{{ samu.gouvernorat }}</td>
+          <td (click)="viewSamuDetails(samu.id)">{{ samu.ville }}</td>
+          <td (click)="viewSamuDetails(samu.id)">{{ samu.telephone }}</td>
+          <td (click)="viewSamuDetails(samu.id)">{{ samu.email || '-' }}</td>
+          <td (click)="viewSamuDetails(samu.id)">{{ samu.hopital?.nom || '-' }}</td>
+          <td class="actions-cell">
+            <button 
+              class="btn-delete" 
+              (click)="deleteSamu($event, samu.id, samu.nom)"
+              title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Affichage {{ currentPage * itemsPerPage + 1 }} - {{ Math.min((currentPage + 1) * itemsPerPage, totalElements) }} sur {{ totalElements }} éléments
+      </div>
+      
+      <div class="pagination-controls">
+        <button 
+          class="pagination-btn" 
+          (click)="onPageChange(0)" 
+          [disabled]="currentPage === 0">
+          ⏮️
+        </button>
+        <button 
+          class="pagination-btn" 
+          (click)="onPageChange(currentPage - 1)" 
+          [disabled]="currentPage === 0">
+          ◀️
+        </button>
+        
+        <button 
+          *ngFor="let page of getPageNumbers()" 
+          class="pagination-btn" 
+          [class.active]="page === currentPage"
+          (click)="onPageChange(page)">
+          {{ page + 1 }}
+        </button>
+        
+        <button 
+          class="pagination-btn" 
+          (click)="onPageChange(currentPage + 1)" 
+          [disabled]="currentPage === totalPages - 1">
+          ▶️
+        </button>
+        <button 
+          class="pagination-btn" 
+          (click)="onPageChange(totalPages - 1)" 
+          [disabled]="currentPage === totalPages - 1">
+          ⏭️
+        </button>
+      </div>
+
+      <div class="page-size-selector">
+        <label>Éléments par page:</label>
+        <select [(ngModel)]="itemsPerPage" (change)="onPageSizeChange()">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

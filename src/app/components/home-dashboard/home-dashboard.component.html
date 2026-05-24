@@ -1,5 +1,36 @@
 <div class="dashboard">
-  <h1>Bienvenue dans le Home</h1>
-  <p>Sélectionnez une option dans le menu.</p>
-  <img [src]="imageUrl" alt="Logo">
+  <div class="header">
+    <h1>🗺️ Carte des Établissements de Santé</h1>
+    <p>Visualisez les hôpitaux et les SAMU en Tunisie</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item">
+      <span class="legend-icon hospital">🏥</span>
+      <span>Hôpitaux</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon samu">🚑</span>
+      <span>SAMU</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon user">📍</span>
+      <span>Ma position</span>
+    </div>
+    <button class="btn-location" (click)="getUserLocation()" title="Afficher ma position">
+      📍 Me localiser
+    </button>
+    <button class="btn-nearest" (click)="findNearestSamus()" [disabled]="!userLocation" title="Trouver les SAMU les plus proches" style="display: inline-block !important; visibility: visible !important;">
+      🚑 Le plus proche
+    </button>
+  </div>
+
+  <div class="map-container">
+    <div id="map" class="map"></div>
+    <div *ngIf="loading" class="loading-overlay">
+      <p>Chargement de la carte...</p>
+    </div>
+  </div>
+
+  
 </div>

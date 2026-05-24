@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PAGINATION_CONFIG } from '../config/pagination.config';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,12 @@ export class AgentHospitaliseService {
     return this.http.post(`${this.apiUrl}`, data);
   }
 
-  getAllAgents(): Observable<any> {
-    return this.http.get(`${this.apiUrl}`);
+  getAllAgents(page: number = 0, size: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE, sortBy: string = PAGINATION_CONFIG.DEFAULT_SORT_BY, sortDir: string = PAGINATION_CONFIG.DEFAULT_SORT_DIR): Observable<any> {
+    return this.http.get(`${this.apiUrl}?page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
+  }
+
+  getAllAgentsNoPagination(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
   getAgentById(id: number): Observable<any> {

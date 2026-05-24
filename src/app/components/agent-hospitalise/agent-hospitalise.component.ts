@@ -55,7 +55,7 @@ export class AgentHospitaliseComponent implements OnInit {
   }
 
   loadHopitals(): void {
-    this.hopitalService.getAllHopitals().subscribe({
+    this.hopitalService.getAllHopitalsNoPagination().subscribe({
       next: (data) => {
         this.hopitals = data;
       },

@@ -112,16 +112,10 @@
 
       <div class="form-group full-width">
         <label>Type d'établissement *</label>
-        <div class="radio-group">
-          <label class="radio-label">
-            <input type="radio" value="PUBLIC" formControlName="type">
-            <span>🏛️ Public</span>
-          </label>
-          <label class="radio-label">
-            <input type="radio" value="PRIVE" formControlName="type">
-            <span>🏢 Privé</span>
-          </label>
-        </div>
+        <select formControlName="type">
+          <option value="">-- Choisir un type --</option>
+          <option *ngFor="let type of typesHopital" [value]="type.value">{{ type.label }}</option>
+        </select>
         <span class="error-message" *ngIf="hopitalForm.get('type')?.invalid && hopitalForm.get('type')?.touched">
           Le type est obligatoire
         </span>

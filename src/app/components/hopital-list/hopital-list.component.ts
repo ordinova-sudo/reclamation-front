@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HopitalService } from '../../services/hopital.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-hopital-list',
@@ -16,8 +17,35 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class HopitalListComponent implements OnInit {
   hopitals: any[] = [];
   filteredHopitals: any[] = [];
+  paginatedHopitals: any[] = [];
   loading: boolean = true;
   searchTerm: string = '';
+  selectedType: string = '';
+  selectedGouvernorat: string = '';
+  
+  // Pagination backend
+  currentPage: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
+  totalPages: number = 0;
+  totalElements: number = 0;
+  pageSizeOptions: number[] = PAGINATION_CONFIG.PAGE_SIZE_OPTIONS;
+  Math = Math;
+
+  typesHopital = [
+    { value: 'UNIVERSITAIRE', label: 'Universitaire' },
+    { value: 'MILITAIRE', label: 'Militaire' },
+    { value: 'REGIONAL', label: 'Régional' },
+    { value: 'DISTRICT', label: 'District' }
+  ];
+
+  gouvernorats: string[] = [
+    'Tunis','Ariana','Ben Arous','Manouba',
+    'Nabeul','Zaghouan','Bizerte','Béja',
+    'Jendouba','Le Kef','Siliana','Kairouan',
+    'Kasserine','Sidi Bouzid','Sousse','Monastir',
+    'Mahdia','Sfax','Gabès','Médenine',
+    'Tataouine','Gafsa','Tozeur','Kébili'
+  ];
 
   constructor(
     private hopitalService: HopitalService,
@@ -35,10 +63,13 @@ export class HopitalListComponent implements OnInit {
   }
 
   loadHopitals(): void {
-    this.hopitalService.getAllHopitals().subscribe({
-      next: (data) => {
-        this.hopitals = data;
-        this.filteredHopitals = data;
+    this.hopitalService.getAllHopitals(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        this.hopitals = response.content;
+        this.applyFilters();
+        this.totalPages = response.totalPages;
+        this.totalElements = response.totalElements;
+        this.currentPage = response.number;
         this.loading = false;
       },
       error: (err) => {
@@ -48,14 +79,51 @@ export class HopitalListComponent implements OnInit {
     });
   }
 
+  applyFilters(): void {
+    this.paginatedHopitals = this.hopitals.filter(hopital => {
+      const matchesSearch = !this.searchTerm.trim() || 
+        hopital.nom.toLowerCase().includes(this.searchTerm.toLowerCase());
+      
+      const matchesType = !this.selectedType || 
+        hopital.type === this.selectedType;
+      
+      const matchesGouvernorat = !this.selectedGouvernorat || 
+        hopital.gouvernorat === this.selectedGouvernorat;
+      
+      return matchesSearch && matchesType && matchesGouvernorat;
+    });
+  }
+
   filterHopitals(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredHopitals = this.hopitals;
-    } else {
-      this.filteredHopitals = this.hopitals.filter(hopital =>
-        hopital.nom.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
+    this.applyFilters();
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadHopitals();
     }
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 0;
+    this.loadHopitals();
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(0, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages - 1, startPage + maxPagesToShow - 1);
+    
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(0, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   viewHopitalDetails(id: number): void {

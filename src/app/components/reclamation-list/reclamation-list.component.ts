@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ReclamationService } from '../../services/reclamation.service';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PAGINATION_CONFIG } from '../../config/pagination.config';
 
 @Component({
   selector: 'app-reclamation-list',
@@ -16,6 +17,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 export class ReclamationListComponent implements OnInit {
   reclamations: any[] = [];
   filteredReclamations: any[] = [];
+  paginatedReclamations: any[] = [];
   loading: boolean = true;
   searchTerm: string = '';
   selectedType: string = '';
@@ -23,6 +25,14 @@ export class ReclamationListComponent implements OnInit {
   
   types = ['AMBULANCE', 'SCANNER', 'LIT'];
   statuses = ['NON_TRAITE', 'EN_COURS', 'TRAITE', 'ANNULE'];
+
+  // Pagination backend
+  currentPage: number = 0;
+  itemsPerPage: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE;
+  totalPages: number = 0;
+  totalElements: number = 0;
+  pageSizeOptions: number[] = PAGINATION_CONFIG.PAGE_SIZE_OPTIONS;
+  Math = Math;
 
   constructor(
     private reclamationService: ReclamationService,
@@ -40,10 +50,13 @@ export class ReclamationListComponent implements OnInit {
   }
 
   loadReclamations(): void {
-    this.reclamationService.getAllReclamations().subscribe({
-      next: (data) => {
-        this.reclamations = data;
-        this.filteredReclamations = data;
+    this.reclamationService.getAllReclamationsOnly(this.currentPage, this.itemsPerPage).subscribe({
+      next: (response) => {
+        console.log('Réponse backend réclamations:', response);
+        this.paginatedReclamations = response.content || [];
+        this.totalPages = response.totalPages || 0;
+        this.totalElements = response.totalElements || 0;
+        this.currentPage = response.number || 0;
         this.loading = false;
       },
       error: (err) => {
@@ -54,19 +67,36 @@ export class ReclamationListComponent implements OnInit {
   }
 
   filterReclamations(): void {
-    this.filteredReclamations = this.reclamations.filter(reclamation => {
-      const matchesSearch = !this.searchTerm.trim() || 
-        reclamation.sujet.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        reclamation.description.toLowerCase().includes(this.searchTerm.toLowerCase());
-      
-      const matchesType = !this.selectedType || 
-        reclamation.typeCible === this.selectedType;
-      
-      const matchesStatus = !this.selectedStatus || 
-        reclamation.statut === this.selectedStatus;
-      
-      return matchesSearch && matchesType && matchesStatus;
-    });
+    this.currentPage = 0;
+    this.loadReclamations();
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.loadReclamations();
+    }
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 0;
+    this.loadReclamations();
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    const maxPagesToShow = 5;
+    let startPage = Math.max(0, this.currentPage - Math.floor(maxPagesToShow / 2));
+    let endPage = Math.min(this.totalPages - 1, startPage + maxPagesToShow - 1);
+    
+    if (endPage - startPage < maxPagesToShow - 1) {
+      startPage = Math.max(0, endPage - maxPagesToShow + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 
   viewReclamationDetails(id: number): void {

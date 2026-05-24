@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { PAGINATION_CONFIG } from '../config/pagination.config';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,12 @@ constructor(private http: HttpClient) { }
     return this.http.post(`${this.apiUrl}`, data);
   }
 
-  getAllHopitals(): Observable<any> {
-    return this.http.get(`${this.apiUrl}`);
+  getAllHopitals(page: number = 0, size: number = PAGINATION_CONFIG.DEFAULT_PAGE_SIZE, sortBy: string = PAGINATION_CONFIG.DEFAULT_SORT_BY, sortDir: string = PAGINATION_CONFIG.DEFAULT_SORT_DIR): Observable<any> {
+    return this.http.get(`${this.apiUrl}?page=${page}&size=${size}&sortBy=${sortBy}&sortDir=${sortDir}`);
+  }
+
+  getAllHopitalsNoPagination(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all`);
   }
 
   getHopitalById(id: number): Observable<any> {

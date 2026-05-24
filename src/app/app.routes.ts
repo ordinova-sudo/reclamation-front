@@ -25,6 +25,11 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { ReclamationListComponent } from './components/reclamation-list/reclamation-list.component';
 import { ReclamationComponent } from './components/reclamation/reclamation.component';
 import { ReclamationDetailsComponent } from './components/reclamation-details/reclamation-details.component';
+import { IncidentListComponent } from './components/incident-list/incident-list.component';
+import { IncidentComponent } from './components/incident/incident.component';
+import { IncidentDetailsComponent } from './components/incident-details/incident-details.component';
+import { SamuListComponent } from './components/samu-list/samu-list.component';
+import { SamuDetailsComponent } from './components/samu-details/samu-details.component';
 import { VisiteurListComponent } from './components/visiteur-list/visiteur-list.component';
 import { VisiteurDetailsComponent } from './components/visiteur-details/visiteur-details.component';
 
@@ -44,6 +49,8 @@ export const routes: Routes = [
         { path: 'addHopital', component: HopitalComponent },
         { path: 'hopital-list', component: HopitalListComponent },
         { path: 'hopital-details/:id', component: HopitalDetailsComponent },
+        { path: 'samu-list', component: SamuListComponent },
+        { path: 'samu-details/:id', component: SamuDetailsComponent },
         { path: 'addAgent', component: AgentHospitaliseComponent },
         { path: 'agent-list', component: AgentListComponent },
         { path: 'agent-details/:id', component: AgentDetailsComponent },
@@ -59,6 +66,9 @@ export const routes: Routes = [
         { path: 'addReclamation', component: ReclamationComponent },
         { path: 'reclamation-list', component: ReclamationListComponent },
         { path: 'reclamation-details/:id', component: ReclamationDetailsComponent },
+        { path: 'addIncident', component: IncidentComponent },
+        { path: 'incident-list', component: IncidentListComponent },
+        { path: 'incident-details/:id', component: IncidentDetailsComponent },
         { path: 'visiteur-list', component: VisiteurListComponent },
         { path: 'visiteur-details/:id', component: VisiteurDetailsComponent },
         { path: 'profile', component: UserProfileComponent }
