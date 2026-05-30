@@ -4,6 +4,129 @@
     <p>Visualisez les hôpitaux et les SAMU en Tunisie</p>
   </div>
 
+  <!-- Dashboard Statistiques -->
+  <div class="dashboard-stats" *ngIf="!statsLoading && dashboardStats">
+    <h2 class="stats-title">📊 Tableau de Bord - Statistiques Générales</h2>
+    
+    <!-- Statistiques Générales -->
+    <div class="stats-section">
+      <h3 class="section-title">📈 Vue d'ensemble</h3>
+      <div class="stats-grid">
+        <div class="stat-box success">
+          <div class="stat-number">{{ dashboardStats.nombreAgentsHospitalises }}</div>
+          <div class="stat-label">👨‍⚕️ Agents Hospitalisés</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">{{ dashboardStats.nombreLitsTotal }}</div>
+          <div class="stat-label">🛏️ Lits Total</div>
+        </div>
+        <div class="stat-box success">
+          <div class="stat-number">{{ dashboardStats.nombreLitsDisponibles }}</div>
+          <div class="stat-label">✅ Lits Disponibles</div>
+        </div>
+        <div class="stat-box danger">
+          <div class="stat-number">{{ dashboardStats.nombreLitsNonDisponibles }}</div>
+          <div class="stat-label">❌ Lits Non Disponibles</div>
+        </div>
+        <div class="stat-box warning">
+          <div class="stat-number">{{ dashboardStats.nombreReclamationsTotal }}</div>
+          <div class="stat-label">📝 Réclamations Total</div>
+        </div>
+        <div class="stat-box highlight">
+          <div class="stat-number">{{ dashboardStats.nombreVisiteursTotal }}</div>
+          <div class="stat-label">👥 Visiteurs Total</div>
+        </div>
+        <div class="stat-box danger">
+          <div class="stat-number">{{ dashboardStats.nombreUsersNonAcceptes }}</div>
+          <div class="stat-label">⏳ Users Non Acceptés</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Réclamations par Type -->
+    <div class="stats-section">
+      <h3 class="section-title">🔍 Réclamations par Type</h3>
+      <div class="stats-grid">
+        <div class="stat-box" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+          <div class="stat-number">{{ dashboardStats.nombreReclamationsAmbulances }}</div>
+          <div class="stat-label">🚑 Ambulances</div>
+        </div>
+        <div class="stat-box" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <div class="stat-number">{{ dashboardStats.nombreReclamationsLits }}</div>
+          <div class="stat-label">🛏️ Lits</div>
+        </div>
+        <div class="stat-box" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+          <div class="stat-number">{{ dashboardStats.nombreReclamationsScanners }}</div>
+          <div class="stat-label">🔬 Scanners</div>
+        </div>
+        <div class="stat-box" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+          <div class="stat-number">{{ dashboardStats.nombreReclamationsPannesTechniques }}</div>
+          <div class="stat-label">⚠️ Pannes Techniques</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 4 Hôpitaux -->
+    <div class="stats-section" *ngIf="dashboardStats.top4Hopitaux && dashboardStats.top4Hopitaux.length > 0">
+      <h3 class="section-title">🏥 Top 4 Hôpitaux avec le plus de Réclamations</h3>
+      <div class="top-list">
+        <div class="top-item" *ngFor="let hopital of dashboardStats.top4Hopitaux; let i = index">
+          <div class="top-rank">#{{ i + 1 }}</div>
+          <div class="top-info">
+            <div class="top-name">{{ hopital.nomHopital }}</div>
+            <div class="top-count">{{ hopital.nombreReclamations }} réclamations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Éléments les plus réclamés -->
+    <div class="stats-section">
+      <h3 class="section-title">🎯 Éléments avec le plus de Réclamations</h3>
+      <div class="stats-grid">
+        <div class="stat-box danger" *ngIf="dashboardStats.litPlusReclame">
+          <div class="stat-name">🛏️ {{ dashboardStats.litPlusReclame.numeroLit }}</div>
+          <div class="stat-count">{{ dashboardStats.litPlusReclame.nombreReclamations }} réclamations</div>
+          <div class="stat-label">Lit le plus réclamé</div>
+        </div>
+        <div class="stat-box danger" *ngIf="dashboardStats.scannerPlusReclame">
+          <div class="stat-name">🔬 {{ dashboardStats.scannerPlusReclame.nomScanner }}</div>
+          <div class="stat-count">{{ dashboardStats.scannerPlusReclame.nombreReclamations }} réclamations</div>
+          <div class="stat-label">Scanner le plus réclamé</div>
+        </div>
+        <div class="stat-box danger" *ngIf="dashboardStats.ambulancePlusReclamee">
+          <div class="stat-name">🚑 {{ dashboardStats.ambulancePlusReclamee.immatriculation }}</div>
+          <div class="stat-count">{{ dashboardStats.ambulancePlusReclamee.nombreReclamations }} réclamations</div>
+          <div class="stat-label">Ambulance la plus réclamée</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 4 Users -->
+    <div class="stats-section" *ngIf="dashboardStats.top4Users && dashboardStats.top4Users.length > 0">
+      <h3 class="section-title">👤 Top 4 Utilisateurs avec le plus de Réclamations</h3>
+      <div class="top-list">
+        <div class="top-item" *ngFor="let user of dashboardStats.top4Users; let i = index">
+          <div class="top-rank">#{{ i + 1 }}</div>
+          <div class="top-info">
+            <div class="top-name">{{ user.nom }} {{ user.prenom }}</div>
+            <div class="top-email">{{ user.email }}</div>
+            <div class="top-count">{{ user.nombreReclamations }} réclamations</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-stats" *ngIf="statsLoading">
+    Chargement des statistiques...
+  </div>
+
+  <!-- Debug: Afficher l'état -->
+  <div *ngIf="!statsLoading && !dashboardStats" style="background: #fff3cd; padding: 20px; margin: 20px 0; border-radius: 8px; text-align: center;">
+    <p style="color: #856404; margin: 0;">⚠️ Aucune donnée de statistiques disponible. Vérifiez que le backend est démarré sur le port 8087.</p>
+  </div>
+
   <div class="legend">
     <div class="legend-item">
       <span class="legend-icon hospital">🏥</span>
@@ -32,5 +155,4 @@
     </div>
   </div>
 
-  
 </div>

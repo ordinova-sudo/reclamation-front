@@ -52,12 +52,15 @@ export class HomeDashboardComponent implements OnInit {
 
   loadDashboardStats(): void {
     this.statsLoading = true;
+    console.log('🔄 Chargement des statistiques du dashboard...');
     this.dashboardService.getStats().subscribe({
       next: (data) => {
+        console.log('✅ Statistiques reçues:', data);
         this.dashboardStats = data;
         this.statsLoading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('❌ Erreur lors du chargement des statistiques:', error);
         this.statsLoading = false;
       }
     });

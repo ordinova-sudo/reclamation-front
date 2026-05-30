@@ -57,7 +57,7 @@ export interface DashboardStatsDTO {
   providedIn: 'root'
 })
 export class DashboardService {
-  private apiUrl = 'http://localhost:8080/api/dashboard';
+  private apiUrl = 'http://localhost:8087/api/dashboard';
 
   constructor(private http: HttpClient) {}
 
